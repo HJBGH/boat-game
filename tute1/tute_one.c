@@ -18,25 +18,26 @@ void display()
 {
     int err;
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glEnable(GL_DEPTH_TEST);
+    glDisable(GL_DEPTH_TEST);
     glBegin(GL_QUADS | GL_POINTS);
     /* Put drawing code here */
-    glColor3ui(0xffffffff,0xffffffff,0xffffffff);
-    //glVertex3f(0.0,0.0,0.0);
-    glVertex3f(-0.5, -0.5, -0.5);
-    glVertex3f(0.5, -0.5, -0.5);
-    glVertex3f(0.5, 0.5, -0.5);   
-    glVertex3f(-0.5, 0.5, -0.5);   
-
     glColor3ui(0, 0xffffffff, 0);
     glVertex3f(-0.25, -0.25, -0.75);
     glVertex3f(0.75, -0.25, -0.75);
     glVertex3f(0.75, 0.75, -0.75);
     glVertex3f(-0.25, 0.75, -0.75);
     printf("display\n"); 
+    glColor3ui(0xffffffff,0,0);
+    //glVertex3f(0.0,0.0,0.0);
+    glVertex3f(-0.5, -0.5, -0.5);
+    glVertex3f(0.5, -0.5, -0.5);
+    glVertex3f(0.5, 0.5, -0.5);   
+    glVertex3f(-0.5, 0.5, -0.5);   
+
+
     glEnd();
 
-    if(err = glGetError())
+    if((err = glGetError()))
     {
         printf("%s\n", (gluErrorString(err)));
     }
