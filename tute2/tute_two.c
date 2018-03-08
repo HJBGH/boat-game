@@ -21,7 +21,13 @@ void display()
     int err;
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
-
+    glColor3f(1.0,1.0,1.0);
+    int x = -1;
+    int y = x;
+    glVertex3f(x, y, 0);
+    x = 1;
+    y = x;
+    glVertex3f(x, y, 0);
 
     drawAxes(1.0);
     
