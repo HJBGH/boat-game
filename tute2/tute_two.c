@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <math.h>
 
 #if _WIN32
 #	include <Windows.h>
@@ -14,6 +15,11 @@
 #   include <GL/glut.h>
 #endif
 
+#define SEGMENTS 100
+#define L_MAX -1.0
+#define R_MAX 1.0
+
+
 void drawAxes(float l);
 
 void display()
@@ -21,20 +27,25 @@ void display()
     int err;
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
+
+    glBegin(GL_LINE_STRIP);   
+    float x = 0;
+    float y = 0;
+    float stepSize = (R_MAX - L_MAX)/SEGMENTS;
     glColor3f(1.0,1.0,1.0);
-
-    glBegin(GL_LINES);   
-    float x = -1;
-    float y = (-1*x)/2;
-    glVertex3f(x, y, 0);
-    x = 1;
-    y = (-1*x)/2;
-    glVertex3f(x, y, 0);
-
+    for(int i = 0; i <= SEGMENTS; i++)
+    {
+        x = (i * stepSize) + L_MAX;
+        y = (-2 * powf(x, 2)) + (2 * x) + 1;
+        printf("%f <- x\n", x);
+        printf("%f <- y\n\n", y);
+        glVertex3f(x, y, 0); 
+    }
+    glEnd();        
+    
     drawAxes(1.0);
     
    
-    glEnd();
 
     if((err = glGetError()))
     {
@@ -58,6 +69,7 @@ void drawAxes(float l)
     glColor3ui(0 ,0, 0xffffffff);
     glVertex3f(0, 0, 0);
     glVertex3f(0, 0, l);
+    glEnd();
     return;
 }
 

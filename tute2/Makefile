@@ -1,5 +1,5 @@
 TARGET = tute_two
-LDFLAGS = -lGL -lGLU -lglut
+LDFLAGS = -lGL -lGLU -lglut -lm
 CFLAGS = -Wall -std=c99
 
 make:
