@@ -22,11 +22,15 @@ void display()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
     glColor3f(1.0,1.0,1.0);
+
+    /*It's impossible to draw the function y = 2x -1 because of the limited 
+     * default co-ordinate system that opengl uses*/
+    glBegin(GL_LINES);   
     int x = -1;
-    int y = x;
+    int y = (2*x) + 1;
     glVertex3f(x, y, 0);
     x = 1;
-    y = x;
+    y = (2 * x) + 1;
     glVertex3f(x, y, 0);
 
     drawAxes(1.0);
