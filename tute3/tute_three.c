@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+#include <stdbool.h>
 
 #if _WIN32
 #	include <Windows.h>
@@ -27,16 +28,25 @@ void drawSineWave();
 void drawVector(float x, float y, float a, float b, float s, bool normalize, float r, float g, float v);
 
 static const float PI = acos(-1.0);
+typedef struct {float t, lastT, dt;} Global;
+
+Global g;
+
+void idle()
+{
+    g.t = glutGet(GLUT_ELAPSED_TIME);
+    printf("idle function called\n");
+    glutPostRedisplay();
+}
 
 void display()
 {
     int err;
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glEnable(GL_DEPTH_TEST);
-
+    glEnable(GL_DEPTH_TEST); 
     drawSineWave();
     drawAxes(1.0);
-    
+    glutSwapBuffers();    
    
 
     if((err = glGetError()))
@@ -44,7 +54,6 @@ void display()
         printf("%s\n", (gluErrorString(err)));
     }
     
-    glutSwapBuffers();
 }
 
 void drawSineWave()
@@ -58,7 +67,7 @@ void drawSineWave()
     for(int i = 0; i <= SEGMENTS; i++)
     {
         x = (i * stepSize) + L_MAX;
-        y = AMP * sinf(k * x);
+        y = AMP * sinf(k * x + (PI/4) * g.t);
         printf("%f <- x\n", x);
         printf("%f <- y\n\n", y);
         glVertex3f(x, y, 0); 
@@ -114,12 +123,15 @@ int main(int argc, char **argv)
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
     glutCreateWindow("Tutorial 1");
+    g = (Global) {.t = glutGet(GLUT_ELAPSED_TIME), .lastT = 0.0, .dt = 0.0};
 
     init();
 
     glutDisplayFunc(display);
     glutKeyboardFunc(keyboard);
+    glutIdleFunc(idle);
     glutMainLoop();
+    printf("This shouldn't print");
 
     return EXIT_SUCCESS;
 }
