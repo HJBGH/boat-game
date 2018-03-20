@@ -1,4 +1,4 @@
-TARGET = tute_three
+TARGET = projectile-motion
 LDFLAGS = -lGL -lGLU -lglut -lm
 CFLAGS = -Wall -std=c99
 

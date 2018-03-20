@@ -34,7 +34,9 @@ Global g;
 
 void idle()
 {
+    g.lastT = g.t;
     g.t = glutGet(GLUT_ELAPSED_TIME);
+    g.dt = g.t - g.lastT; 
     printf("idle function called\n");
     glutPostRedisplay();
 }
@@ -67,7 +69,7 @@ void drawSineWave()
     for(int i = 0; i <= SEGMENTS; i++)
     {
         x = (i * stepSize) + L_MAX;
-        y = AMP * sinf(k * x + (PI/4) * g.t);
+        y = AMP * sinf((k * x) + ((PI/4) * g.t));
         printf("%f <- x\n", x);
         printf("%f <- y\n\n", y);
         glVertex3f(x, y, 0); 
