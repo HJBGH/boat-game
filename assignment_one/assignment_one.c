@@ -1,20 +1,4 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <math.h>
-
-#if _WIN32
-#	include <Windows.h>
-#endif
-#if __APPLE__
-#	include <OpenGL/gl.h>
-#	include <OpenGL/glu.h>
-#	include <GLUT/glut.h>
-#else 
-#   include <GL/gl.h>
-#   include <GL/glu.h>
-#   include <GL/glut.h>
-#endif
-
+#include "includes.h"
 /*There will need to be a bunch of flags up here to handle game setting toggles
  * on the key board*/
 
@@ -50,25 +34,6 @@ void display()
     }
     
     glutSwapBuffers();
-}
-
-/* You can ignore this for now, it just lets you exit when you press 'q' or ESC */
-void keyboard(unsigned char key, int x, int y)
-{
-    switch (key)
-    {
-    case 27:
-    case 'q':
-        exit(EXIT_SUCCESS); 
-		break;
-	case ' ':
-		printf("Spacebar pressed\n");
-		break;
-	case 'e':
-		break;
-    default:
-        break;
-    }
 }
 
 void init()
