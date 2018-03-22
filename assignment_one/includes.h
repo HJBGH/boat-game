@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
-#include "keyboard.h"
+#include <stdbool.h>
 
 #if _WIN32
 #	include <Windows.h>
@@ -16,4 +16,4 @@
 #   include <GL/glut.h>
 #endif
 
-
+extern bool wave_wire_flag;

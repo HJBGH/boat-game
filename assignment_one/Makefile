@@ -2,7 +2,7 @@
 #on that platform.
 
 TARGET = assignment_one
-LDFLAGS = -lGL -lGLU -lglut
+LDFLAGS = -lGL -lGLU -lglut -lm
 CFLAGS = -Wall -std=c99
 HEADERS = includes.h keyboard.h
 $(TARGET): $(TARGET).c keyboard.o

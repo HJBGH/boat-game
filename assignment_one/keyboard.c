@@ -2,6 +2,7 @@
 #include "keyboard.h"
 
 
+
 /*There will need to be interactions with extern vars in order to handle 
  * keyboard input from this file*/
 void keyboard(unsigned char key, int x, int y)
@@ -17,6 +18,10 @@ void keyboard(unsigned char key, int x, int y)
 		break;
 	case 'e':
 		break;
+    case 'w':
+        printf("toggling wave wireframe\n");
+        wave_wire_flag = !wave_wire_flag;
+        break;
     default:
         break;
     }
