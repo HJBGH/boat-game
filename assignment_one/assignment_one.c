@@ -13,6 +13,8 @@
 
 /*initialize the global flags ther were declared in includes.h*/
 bool wave_wire_flag = false;
+bool wave_norm_flag = true;
+bool wave_tang_flag = false;
 
 /*There will need to be a bunch of flags up here to handle game setting toggles
  * on the key board*/
@@ -30,6 +32,17 @@ void idle()
     glutPostRedisplay();
 }
 
+void drawVector(float x, float y, float a, float b, float s)
+{
+    //draw a vector, I don't think we'll ever end up using normalize,
+    //add color args
+    glBegin(GL_LINES);
+    glColor3f(1,1,1);
+   
+    glVertex3f(x, y, 0);
+    glVertex3f(x+a, y+b, 0);
+    glEnd();
+}
 
 void drawAxes(float l)
 {
@@ -77,10 +90,28 @@ void drawOcean()
         glVertex3f(x, y, 1);
         glVertex3f(x, OCEAN_FLOOR, 1);
     }
+    glEnd();
+    
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+    if(wave_norm_flag)
+    {
+        //This is incredible clunky
+        int dy;
+        for(int i = 0; i <= SEGMENTS; i++)
+        {
+            x = (i * stepSize) + L_MAX;
+            y = AMP * sinf((k * x) + ((PI/4.0) * g.t));
+            /*printf("%f <- x\n", x);
+            printf("%f <- y\n\n", y);*/
+            dy = (k * AMP) * cosf((k * x) + (PI/4.0));
+            drawVector(x, y, 1, dy, .1);         
+        }
+    }
+
 
     glEnd();        
     //reset poly mode.
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
     return;
 }

@@ -17,3 +17,5 @@
 #endif
 
 extern bool wave_wire_flag;
+extern bool wave_norm_flag;
+extern bool wave_tang_flag;
