@@ -32,15 +32,15 @@ void idle()
     glutPostRedisplay();
 }
 
-void drawVector(float x, float y, float a, float b, float s)
+void drawVector(float x, float y, float a, float b, float s, float cr, float cg, float cb)
 {
     //draw a vector, I don't think we'll ever end up using normalize,
     //add color args
     glBegin(GL_LINES);
-    glColor3f(1,1,1);
+    glColor3f(cr,cb,cg);
    
     glVertex3f(x, y, 0);
-    glVertex3f(x+a, y+b, 0);
+    glVertex3f(x+(a * s), y+(b * s), 0);
     glEnd();
 }
 
@@ -66,6 +66,29 @@ void drawAxes(float l)
 /*should this take arguments? who knows.*/
 void drawOcean() 
 {
+	/*variable declaration*/
+	float k = (2 * PI) / WL; /*effectively PI, open to change*/
+    float x = 0; 
+    float y = 0;
+    float stepSize = (R_MAX - L_MAX)/SEGMENTS;
+ 
+	if(wave_norm_flag)
+    {
+        //This is incredible clunky
+        float dy;
+        for(int i = 0; i <= SEGMENTS; i++)
+        {
+            x = (i * stepSize) + L_MAX;
+            y = AMP * sinf((k * x) + ((PI/4.0) * g.t));
+            /*printf("%f <- x\n", x);*/
+            dy = (k * AMP) * cosf((k * x) + ((PI/4.0) * g.t));
+
+            //printf("%f <- dy\n\n", dy);
+            drawVector(x, y, 1, dy, .1, 1, 0, 0);         
+        }
+    }
+
+
     /*need to add facilities for lowering resolution/drawing tan/wireframe/
      * drawing ortho*/
     if(wave_wire_flag)
@@ -76,11 +99,7 @@ void drawOcean()
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     }
     glBegin(GL_QUAD_STRIP);
-    float k = (2 * PI) / WL; /*effectively PI, open to change*/
-    float x = 0; 
-    float y = 0;
-    float stepSize = (R_MAX - L_MAX)/SEGMENTS;
-    glColor4f(0,.7,1.0,.6);
+   	glColor4f(0,.7,1.0,.55);
     for(int i = 0; i <= SEGMENTS; i++)
     {
         x = (i * stepSize) + L_MAX;
@@ -93,21 +112,6 @@ void drawOcean()
     glEnd();
     
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
-    if(wave_norm_flag)
-    {
-        //This is incredible clunky
-        int dy;
-        for(int i = 0; i <= SEGMENTS; i++)
-        {
-            x = (i * stepSize) + L_MAX;
-            y = AMP * sinf((k * x) + ((PI/4.0) * g.t));
-            /*printf("%f <- x\n", x);
-            printf("%f <- y\n\n", y);*/
-            dy = (k * AMP) * cosf((k * x) + (PI/4.0));
-            drawVector(x, y, 1, dy, .1);         
-        }
-    }
 
 
     glEnd();        
@@ -128,7 +132,7 @@ void display()
 
     if((err = glGetError()))
     {
-        printf("%s\n", (gluErrorString(err)));
+        printf("%s: %x\n", (gluErrorString(err)), err);
     }
     
     glutSwapBuffers();
