@@ -19,3 +19,5 @@
 extern bool wave_wire_flag;
 extern bool wave_norm_flag;
 extern bool wave_tang_flag;
+/*I'll probably be able to store extern structs in here, which means it's a 
+ * good place to declare Global*/

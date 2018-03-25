@@ -16,6 +16,10 @@ void keyboard(unsigned char key, int x, int y)
 	case ' ':
 		printf("Spacebar pressed\n");
 		break;
+	case 'n':
+		printf("toggling wave normals\n");
+		wave_norm_flag = !wave_norm_flag;
+		break;
 	case 't':
 		printf("toggling wave tangents\n");	
 		wave_tang_flag = !wave_tang_flag;	

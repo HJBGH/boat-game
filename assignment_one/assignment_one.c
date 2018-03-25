@@ -71,10 +71,12 @@ void drawOcean()
     float x = 0; 
     float y = 0;
     float stepSize = (R_MAX - L_MAX)/SEGMENTS;
- 
-	if(wave_tang_flag)
+
+	/*unfortunately we have to use two loops for this, otherwise
+	 *the vectors get draw into the quad strip*/
+	if(wave_tang_flag || wave_norm_flag)
     {
-        //This is incredible clunky
+        //This is incredibly clunky
         float dy;
         for(int i = 0; i <= SEGMENTS; i++)
         {
@@ -84,7 +86,15 @@ void drawOcean()
             dy = (k * AMP) * cosf((k * x) + ((PI/4.0) * g.t));
 
             //printf("%f <- dy\n\n", dy);
-            drawVector(x, y, 1, dy, .1, 1.0, 0.0, 0.0);         
+			if(wave_tang_flag)
+			{
+            	drawVector(x, y, 1, dy, .1, 1.0, 0.0, 0.0);         
+			}
+
+			if(wave_norm_flag)
+			{
+				drawVector(x,y,-1*dy, 1, .1, 0.0, 1.0, 0.0);
+			}
         }
     }
 
@@ -151,7 +161,7 @@ int main(int argc, char **argv)
 {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
-	glutInitWindowSize(700, 700);
+	glutInitWindowSize(500, 500);
     glutCreateWindow("Island defence 2D");
 
     init();
