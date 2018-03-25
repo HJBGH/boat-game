@@ -32,13 +32,20 @@ void idle()
     glutPostRedisplay();
 }
 
-void drawVector(float x, float y, float a, float b, float s, float cr, float cg, float cb)
+void drawVector(float x, float y, float a, float b, float s, bool n, float cr, float cg, float cb)
 {
     //draw a vector, I don't think we'll ever end up using normalize,
-    //add color args	
+    //add color args
+	if(n)
+	{
+		float c = fabs(sqrt((a*a)+(b*b)));
+		a /= c;
+		b /= c;
+	}
+
     glColor3f(cr,cg,cb);
     glBegin(GL_LINES);
-   
+  	 
     glVertex3f(x, y, 0);
     glVertex3f(x+(a * s), y+(b * s), 0);
     glEnd();
@@ -88,12 +95,12 @@ void drawOcean()
             //printf("%f <- dy\n\n", dy);
 			if(wave_tang_flag)
 			{
-            	drawVector(x, y, 1, dy, .1, 1.0, 0.0, 0.0);         
+            	drawVector(x, y, 1, dy, .1, true, 1.0, 0.0, 0.0);         
 			}
 
 			if(wave_norm_flag)
 			{
-				drawVector(x,y,-1*dy, 1, .1, 0.0, 1.0, 0.0);
+				drawVector(x,y,-dy, 1, .1, true, 0.0, 1.0, 0.0);
 			}
         }
     }
