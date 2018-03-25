@@ -43,6 +43,25 @@ void myWireRhombus(float l, float h)
   glPopMatrix();
 }
 
+void drawAxes(float l)
+{
+	glBegin(GL_LINES);
+	
+	glColor3f(1.0,0,0);
+	glVertex3f(l,0,0);
+	glVertex3f(0,0,0);
+	glColor3f(0,1.0,0);
+	glVertex3f(0,l,0);
+	glVertex3f(0,0,0);
+	/*It's a bit pointless to draw the z axis now, but I'm sure it'll come
+	 * in handy in the next assignment*/
+	glColor3f(0,0,1.0);
+	glVertex3f(0,0,l);
+	glVertex3f(0,0,0);
+	glEnd();
+	glColor3f(1,1,1);
+}
+
 void drawArm(void)
 {
   glPushMatrix();
@@ -50,29 +69,37 @@ void drawArm(void)
   // Shoulder
   glTranslatef(0.0, 0.0, 0.0);
   glRotatef(robot_arm[shoulder], 0.0, 0.0, 1.0);
+  drawAxes(1);
   // Upper arm
   glTranslatef(0.2, 0.0, 0.0);
   myWireRhombus(0.4, 0.2);
+  drawAxes(1);
   // Elbow
   glTranslatef(0.2, 0.0, 0.0);
   glRotatef(robot_arm[elbow], 0.0, 0.0, 1.0);
+  drawAxes(1);
   // Lower arm
   glTranslatef(0.0, -0.2, 0.0);
   myWireRhombus(0.2, 0.4);
+  drawAxes(1);
   // Wrist
   glTranslatef(0.0, -0.2, 0.0);
   glRotatef(robot_arm[wrist], 0.0, 0.0, 1.0);
+  drawAxes(1);
   // Hand
   glTranslatef(0.0, -0.025, 0.0);
   myWireRect(0.2, 0.05);
+  drawAxes(1);
   // Gripper
   glPushMatrix();
   glTranslatef(-0.07+robot_arm[left_plate], -0.1, 0.0);
   myWireRect(0.05, 0.125);
+  drawAxes(1);
   glPopMatrix();
   glPushMatrix();
   glTranslatef(0.075-robot_arm[right_plate], -0.1, 0.0);
   myWireRect(0.05, 0.125);
+  drawAxes(1);
   glPopMatrix();
   
   glPopMatrix();

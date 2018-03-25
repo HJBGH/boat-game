@@ -1,4 +1,4 @@
-TARGET = robot-arm-2D
+TARGET = boat
 LDFLAGS = -lGL -lGLU -lglut
 CFLAGS = -Wall -std=c99
 
