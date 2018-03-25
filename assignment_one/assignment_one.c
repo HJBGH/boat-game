@@ -32,6 +32,18 @@ void idle()
     glutPostRedisplay();
 }
 
+void drawIsland()
+{
+	glBegin(GL_QUAD_STRIP);
+	glColor3f(1,1,0);
+	glVertex3f(-.15,-1,0);
+	glVertex3f(-.15,.2,0);
+	glVertex3f(.15,-1,0);
+	glVertex3f(.15,.2,0);
+	glEnd();
+}
+
+
 void drawVector(float x, float y, float a, float b, float s, float cr, float cg, float cb)
 {
     //draw a vector, I don't think we'll ever end up using normalize,
@@ -127,6 +139,7 @@ void display()
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	drawAxes(1.0);
+	drawIsland();
     drawOcean();
 
     if((err = glGetError()))
