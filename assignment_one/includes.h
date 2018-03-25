@@ -16,6 +16,7 @@
 #   include <GL/glut.h>
 #endif
 
+//maybe move these externs
 extern bool wave_wire_flag;
 extern bool wave_norm_flag;
 extern bool wave_tang_flag;

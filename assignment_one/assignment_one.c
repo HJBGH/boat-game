@@ -1,5 +1,6 @@
 #include "includes.h"
 #include "keyboard.h"
+#include "boats.h"
 
 #define OCEAN_FLOOR -1
 //segments will eventually have to be a var not a def in order to facilitate
