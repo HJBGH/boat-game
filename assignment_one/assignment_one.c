@@ -19,8 +19,6 @@ bool wave_tang_flag = false;
 /*There will need to be a bunch of flags up here to handle game setting toggles
  * on the key board*/
 static const float PI = acos(-1.0);
-typedef struct {float t, lastT, dt;} Global;
-
 Global g;
 
 void idle()

@@ -21,3 +21,10 @@ extern bool wave_norm_flag;
 extern bool wave_tang_flag;
 /*I'll probably be able to store extern structs in here, which means it's a 
  * good place to declare Global*/
+#ifndef GLOBAL
+#define GLOBAL
+typedef struct {float t, lastT, dt;} Global;
+extern Global g;
+#endif
+
+
