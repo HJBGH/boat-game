@@ -72,7 +72,7 @@ void drawOcean()
     float y = 0;
     float stepSize = (R_MAX - L_MAX)/SEGMENTS;
  
-	if(wave_norm_flag)
+	if(wave_tang_flag)
     {
         //This is incredible clunky
         float dy;
