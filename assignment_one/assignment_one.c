@@ -10,6 +10,7 @@
 #define R_MAX 1.0
 #define AMP .2
 #define WL 1
+#define BOAT_SCALE .1
 
 
 /*initialize the global flags ther were declared in includes.h*/
@@ -21,6 +22,15 @@ bool wave_tang_flag = false;
  * on the key board*/
 static const float PI = acos(-1.0);
 Global g;
+
+Boat leftBoat = 
+{
+	.left = true,
+	.health = 10,
+	.x = -.5,
+	.gun_elev = 30,
+	.colors = {1, 0, 0}
+};
 
 void idle()
 {
@@ -76,6 +86,7 @@ void drawOcean()
 	float k = (2 * PI) / WL; /*effectively PI, open to change*/
     float x = 0; 
     float y = 0;
+	//perhaps make stepsize global, we're going to need it for drawing boats
     float stepSize = (R_MAX - L_MAX)/SEGMENTS;
 
 	/*unfortunately we have to use two loops for this, otherwise
@@ -115,7 +126,7 @@ void drawOcean()
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     }
     glBegin(GL_QUAD_STRIP);
-   	glColor4f(0,.7,1.0,.55);
+   	glColor4f(0,.7,1.0,.45);
     for(int i = 0; i <= SEGMENTS; i++)
     {
         x = (i * stepSize) + L_MAX;
@@ -143,6 +154,7 @@ void display()
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	drawAxes(1.0);
+	drawBoat(&leftBoat, BOAT_SCALE);
     drawOcean();
 
     if((err = glGetError()))

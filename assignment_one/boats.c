@@ -1,2 +1,51 @@
 #include "includes.h"
+#include "boats.h"
 
+
+/*TODO: Add facilities for drawing boats facing different directions
+ * */
+void drawBoat(const Boat * boot, float s)
+{
+	/*use information contained in the boat struct to calculate screen
+	 * position and rotation*/
+	glPushMatrix();
+	glLoadIdentity();
+	glTranslatef((*boot).x, .2, 0);
+	glScalef(s, s, s);
+	//glRotatef(r, 0,0,1);
+	glColor3f((*boot).colors[0], (*boot).colors[1], (*boot).colors[2]);
+	glBegin(GL_POLYGON);
+	/*drawing hull*/
+	glVertex2f(-.5,-.25);
+	glVertex2f(.5, -0.25);
+	glVertex2f(1.0, 0.25);
+	glVertex2f(-1.0, 0.25);
+	glEnd();
+	/*move things around*/
+	glPushMatrix();
+	glTranslatef(0,.5,0);
+	/*draw bridge*/
+	glBegin(GL_POLYGON);
+	glVertex2f(-0.25, -0.25);
+	glVertex2f(0.25, -0.25);
+	glVertex2f(0.25, 0.25);
+	glVertex2f(-0.25, 0.25);
+	glEnd();
+
+	glPopMatrix();
+	glPushMatrix();
+	/*draw gun*/
+	glTranslatef(.5,.25,0);
+	glRotatef((*boot).gun_elev, 0, 0, 1);
+	//glTranslatef(0,-.0625,0);
+	glBegin(GL_POLYGON);
+	glVertex2f(0, -.0625);
+	glVertex2f(.5, -.0625);
+	glVertex2f(.5, .0625);
+	glVertex2f(0, .0625);
+	glEnd();
+	glPopMatrix();
+	glPopMatrix();
+	glLoadIdentity(); //just to be safe
+}
+	
