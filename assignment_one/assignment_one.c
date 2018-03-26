@@ -2,25 +2,16 @@
 #include "keyboard.h"
 #include "boats.h"
 
-#define OCEAN_FLOOR -1
-//segments will eventually have to be a var not a def in order to facilitate
-//wave resolution modification
-#define SEGMENTS 100
-#define L_MAX -1.0
-#define R_MAX 1.0
-#define AMP .2
-#define WL 1
 #define BOAT_SCALE .1
 
 
-/*initialize the global flags ther were declared in includes.h*/
+/*initialize the global flags they were declared in includes.h*/
 bool wave_wire_flag = false;
 bool wave_norm_flag = false;
 bool wave_tang_flag = false;
 
 /*There will need to be a bunch of flags up here to handle game setting toggles
  * on the key board*/
-static const float PI = acos(-1.0);
 Global g;
 
 Boat leftBoat = 
@@ -94,7 +85,7 @@ void drawAxes(float l)
 void drawOcean() 
 {
 	/*variable declaration*/
-	float k = (2 * PI) / WL; /*effectively PI, open to change*/
+	float k = (2 * M_PI) / WL; /*effectively PI, open to change*/
     float x = 0; 
     float y = 0;
 	//perhaps make stepsize global, we're going to need it for drawing boats
@@ -109,9 +100,9 @@ void drawOcean()
         for(int i = 0; i <= SEGMENTS; i++)
         {
             x = (i * stepSize) + L_MAX;
-            y = AMP * sinf((k * x) + ((PI/4.0) * g.t));
+            y = AMP * sinf((k * x) + ((M_PI/4.0) * g.t));
             /*printf("%f <- x\n", x);*/
-            dy = (k * AMP) * cosf((k * x) + ((PI/4.0) * g.t));
+            dy = (k * AMP) * cosf((k * x) + ((M_PI/4.0) * g.t));
 
             //printf("%f <- dy\n\n", dy);
 			if(wave_tang_flag)
@@ -141,7 +132,7 @@ void drawOcean()
     for(int i = 0; i <= SEGMENTS; i++)
     {
         x = (i * stepSize) + L_MAX;
-        y = AMP * sinf((k * x) + ((PI/4.0) * g.t));
+        y = AMP * sinf((k * x) + ((M_PI/4.0) * g.t));
         /*printf("%f <- x\n", x);
         printf("%f <- y\n\n", y);*/
         glVertex3f(x, y, 1.0);

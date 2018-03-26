@@ -8,11 +8,17 @@ void drawBoat(const Boat * boot, float s)
 {
 	/*use information contained in the boat struct to calculate screen
 	 * position and rotation*/
+
+	float k = (2 * M_PI) / WL;
+	float y;
+    y = AMP * sinf((k * (*boot).x) + ((M_PI/4.0) * g.t));
+
 	glPushMatrix();
 	glLoadIdentity();
-	glTranslatef((*boot).x, .2, 0);
+	glTranslatef((*boot).x, y, 0);
 	glScalef(s, s, s);
 	//glRotatef(r, 0,0,1);
+	drawAxes(1);
 	glColor3f((*boot).colors[0], (*boot).colors[1], (*boot).colors[2]);
 	glBegin(GL_POLYGON);
 	/*drawing hull*/
