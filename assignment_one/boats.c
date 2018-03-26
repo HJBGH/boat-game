@@ -1,23 +1,24 @@
 #include "includes.h"
 #include "boats.h"
+#define WHY_IS_X_ZERO 90
 
 
-/*TODO: Add facilities for drawing boats facing different directions
+/*TODO: Consider declaring structs to store the vertices of the boats
  * */
 void drawBoat(const Boat * boot, float s)
 {
 	/*use information contained in the boat struct to calculate screen
 	 * position and rotation*/
-
 	float k = (2 * M_PI) / WL;
-	float y;
-    y = AMP * sinf((k * (*boot).x) + ((M_PI/4.0) * g.t));
+	float dy = (k * AMP) * cosf((k * 1) + ((M_PI/4.0) * g.t));
+    float y = AMP * sinf((k * (*boot).x) + ((M_PI/4.0) * g.t));
 
 	glPushMatrix();
 	glLoadIdentity();
 	glTranslatef((*boot).x, y, 0);
 	glScalef(s, s, s);
-	//glRotatef(r, 0,0,1);
+	/*functions returns radians*/
+	glRotatef(-1 * (atan(dy) * (180 / M_PI)), 0,0,1);
 	drawAxes(1);
 	glColor3f((*boot).colors[0], (*boot).colors[1], (*boot).colors[2]);
 	glBegin(GL_POLYGON);
