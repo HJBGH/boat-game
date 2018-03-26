@@ -32,6 +32,17 @@ Boat leftBoat =
 	.colors = {1, 0, 0}
 };
 
+
+Boat rightBoat = 
+{
+	.left = false,
+	.health = 10,
+	.x = .5,
+	.gun_elev = 30,
+	.colors = {0, 0, 1}
+};
+
+
 void idle()
 {
     g.lastT = g.t;
@@ -155,6 +166,7 @@ void display()
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	drawAxes(1.0);
 	drawBoat(&leftBoat, BOAT_SCALE);
+	drawBoat(&rightBoat, BOAT_SCALE);
     drawOcean();
 
     if((err = glGetError()))
