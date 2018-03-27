@@ -32,19 +32,21 @@ void keyboard(unsigned char key, int x, int y)
     /*movement controls*/
     case 'a':
         printf("moving left boat left\n");
-        leftBoat.x-=.01;
+        /*I'm not sure it's a good idea to calculate boat movement in
+         * here*/
+        leftBoat.x-=leftBoat.s*g.dt;
         break;
     case 'd':
         printf("moving left boat right\n");
-        leftBoat.x+=.01;
+        leftBoat.x+=leftBoat.s*g.dt;
         break;
     case 'l':
         printf("moving right boat right\n");
-        rightBoat.x+=.01;
+        rightBoat.x+=rightBoat.s*g.dt;
         break;
     case 'j':
         printf("moving right boat left\n");
-        rightBoat.x-=.01;
+        rightBoat.x-=rightBoat.s*g.dt;
         break;
     default:
         break;

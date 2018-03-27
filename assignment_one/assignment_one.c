@@ -3,6 +3,8 @@
 #include "boats.h"
 
 #define BOAT_SCALE .1
+#define BOAT_SPEED .3 /*slow boats*/
+#define BOAT_HP 10
 
 
 /*initialize the global flags they were declared in includes.h*/
@@ -17,20 +19,22 @@ Global g;
 Boat leftBoat = 
 {
 	.left = true,
-	.hp = 10,
+	.hp = BOAT_HP,
 	.x = -.5,
 	.gun_elev = 30,
-	.colors = {1, 0, 0}
+	.colors = {1, 0, 0},
+    .s = BOAT_SPEED
 };
 
 
 Boat rightBoat = 
 {
 	.left = false,
-	.hp = 10,
+	.hp = BOAT_HP,
 	.x = .5,
 	.gun_elev = 30,
-	.colors = {0, 0, 1}
+	.colors = {0, 0, 1},
+    .s = BOAT_SPEED
 };
 
 

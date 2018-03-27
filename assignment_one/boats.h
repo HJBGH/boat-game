@@ -11,6 +11,7 @@ typedef struct
 	float x; /*y gets calculated later, it doesn't have to be stored*/
 	float gun_elev; /*gun elevation in degrees*/
 	float colors[3];
+    float s; /*s for SPEED, gotta go FAST*/
 } Boat;
 
 extern Boat leftBoat;
