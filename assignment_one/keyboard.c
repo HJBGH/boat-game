@@ -10,7 +10,6 @@ void keyboard(unsigned char key, int x, int y)
     switch (key)
     {
     case 27:/*I take it 27 is esc*/
-    case 'q':
         exit(EXIT_SUCCESS); 
 		break;
 	case ' ':
@@ -82,6 +81,35 @@ void keyboard(unsigned char key, int x, int y)
 			tasmania.gun_elev -= tasmania.gun_rot_s * g.dt;
 		}
 		break;	
+	case 'O':
+		if(rightBoat.gun_elev > 10)
+		{
+			printf("Right boat gun depressing\n");
+			rightBoat.gun_elev -= rightBoat.gun_rot_s * g.dt;
+		}
+		break;
+	case 'o':
+		if(rightBoat.gun_elev < 80)
+		{
+			printf("Right boat gun elevating\n");
+			rightBoat.gun_elev += rightBoat.gun_rot_s * g.dt;
+		}
+		break;
+	case 'Q':
+		if(leftBoat.gun_elev > 10)
+		{
+			printf("Right boat gun depressing\n");
+			leftBoat.gun_elev -= leftBoat.gun_rot_s * g.dt;
+		}
+		break;
+	case 'q':
+		if(leftBoat.gun_elev < 80)
+		{
+			printf("Right boat gun elevating\n");
+			leftBoat.gun_elev += leftBoat.gun_rot_s * g.dt;
+		}
+		break;
+
     default:
         break;
     }
