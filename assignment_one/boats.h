@@ -12,6 +12,7 @@ typedef struct
 	float gun_elev; /*gun elevation in degrees*/
 	float colors[3];
     float s; /*s for SPEED, gotta go FAST*/
+	float gun_rot_s; /*gun rotation speed*/
 } Boat;
 
 extern Boat leftBoat;

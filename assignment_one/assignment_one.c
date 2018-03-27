@@ -3,6 +3,7 @@
 #include "boats.h"
 #include "island.h"
 
+#define BOAT_GUN_S 9 /*gun rotation speed*/
 #define BOAT_SCALE .1
 #define BOAT_SPEED .3 /*slow boats*/
 #define BOAT_HP 10
@@ -21,7 +22,8 @@ Global g;
 Island tasmania = 
 {
 	.hp = ISLAND_HP,
-	.gun_elev = 0
+	.gun_elev = 0,
+	.gun_rot_s = 16
 };
 
 Boat leftBoat = 
@@ -31,7 +33,8 @@ Boat leftBoat =
 	.x = -.5,
 	.gun_elev = 30,
 	.colors = {1, 0, 0},
-    .s = BOAT_SPEED
+    .s = BOAT_SPEED,
+	.gun_rot_s = BOAT_GUN_S
 };
 
 
@@ -42,7 +45,8 @@ Boat rightBoat =
 	.x = .5,
 	.gun_elev = 30,
 	.colors = {0, 0, 1},
-    .s = BOAT_SPEED
+    .s = BOAT_SPEED,
+	.gun_rot_s = BOAT_GUN_S
 };
 
 

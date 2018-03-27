@@ -67,6 +67,21 @@ void keyboard(unsigned char key, int x, int y)
         if(rightBoat.x >= CENTER)
             rightBoat.x-=rightBoat.s*g.dt;
         break;
+	/*cannon controls*/
+	case 'f':
+		if(tasmania.gun_elev < 80)
+		{
+			printf("Island gun rotating left\n");
+			tasmania.gun_elev += tasmania.gun_rot_s * g.dt;
+		}
+		break;
+	case 'h':
+		if(tasmania.gun_elev > -80)
+		{
+			printf("Island gun rotating right\n");
+			tasmania.gun_elev -= tasmania.gun_rot_s * g.dt;
+		}
+		break;	
     default:
         break;
     }

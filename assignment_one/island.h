@@ -5,6 +5,7 @@ typedef struct
 {
 	int hp; 
 	float gun_elev;	
+	float gun_rot_s;/*gun rotation speed*/
 } Island;
 
 extern Island tasmania; /*find better name*/
