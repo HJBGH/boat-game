@@ -28,12 +28,18 @@
 #define AMP .2
 #define WL 1
 #define M_PI 3.14159265358979323846264338327
+/*MAX_T and MIN_T are limits on the tesselation of the waves*/
+#define MAX_T 100
+#define MIN_T 8
+
+
 #endif
 
 //maybe move these externs
 extern bool wave_wire_flag;
 extern bool wave_norm_flag;
 extern bool wave_tang_flag;
+extern int segments;
 /*I'll probably be able to store extern structs in here, which means it's a 
  * good place to declare Global*/
 #ifndef GLOBAL

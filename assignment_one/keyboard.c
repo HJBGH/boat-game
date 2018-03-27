@@ -29,6 +29,21 @@ void keyboard(unsigned char key, int x, int y)
         printf("toggling wave wireframe\n");
         wave_wire_flag = !wave_wire_flag;
         break;
+	case '+':
+		if(segments <= MAX_T)
+		{	
+			printf("increasing wave tesselation\n");
+			segments++;
+			printf("Wave tesselation is incresed to %d\n", segments);
+		}
+		break;
+	case '-':
+		if(segments >= MIN_T)
+		{	
+			printf("decreasing wave tesselation\n");
+			segments--;
+		}
+		break;
     /*movement controls*/
     case 'a':
         printf("moving left boat left\n");

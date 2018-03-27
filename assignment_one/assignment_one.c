@@ -8,11 +8,11 @@
 #define BOAT_HP 10
 #define ISLAND_HP 100
 
-
 /*initialize the global flags they were declared in includes.h*/
 bool wave_wire_flag = false;
 bool wave_norm_flag = false;
 bool wave_tang_flag = false;
+int segments = 80;
 
 /*There will need to be a bunch of flags up here to handle game setting toggles
  * on the key board*/
@@ -100,7 +100,7 @@ void drawOcean()
     float x = 0; 
     float y = 0;
 	//perhaps make stepsize global, we're going to need it for drawing boats
-    float stepSize = (R_MAX - L_MAX)/SEGMENTS;
+    float stepSize = (R_MAX - L_MAX)/segments;
 
 	/*unfortunately we have to use two loops for this, otherwise
 	 *the vectors get draw into the quad strip*/
