@@ -1,27 +1,50 @@
 #include "includes.h"
 #include "keyboard.h"
+#include "boats.h"
+#include "island.h"
 
-#define OCEAN_FLOOR -1
-//segments will eventually have to be a var not a def in order to facilitate
-//wave resolution modification
-#define SEGMENTS 100
-#define L_MAX -1.0
-#define R_MAX 1.0
-#define AMP .2
-#define WL 1
+#define BOAT_SCALE .1
+#define BOAT_SPEED .3 /*slow boats*/
+#define BOAT_HP 10
+#define ISLAND_HP 100
 
 
-/*initialize the global flags ther were declared in includes.h*/
+/*initialize the global flags they were declared in includes.h*/
 bool wave_wire_flag = false;
 bool wave_norm_flag = false;
 bool wave_tang_flag = false;
 
 /*There will need to be a bunch of flags up here to handle game setting toggles
  * on the key board*/
-static const float PI = acos(-1.0);
-typedef struct {float t, lastT, dt;} Global;
-
 Global g;
+
+Island tasmania = 
+{
+	.hp = ISLAND_HP,
+	.gun_elev = 0
+};
+
+Boat leftBoat = 
+{
+	.left = true,
+	.hp = BOAT_HP,
+	.x = -.5,
+	.gun_elev = 30,
+	.colors = {1, 0, 0},
+    .s = BOAT_SPEED
+};
+
+
+Boat rightBoat = 
+{
+	.left = false,
+	.hp = BOAT_HP,
+	.x = .5,
+	.gun_elev = 30,
+	.colors = {0, 0, 1},
+    .s = BOAT_SPEED
+};
+
 
 void idle()
 {
@@ -31,26 +54,20 @@ void idle()
     //printf("idle function called\n");
     glutPostRedisplay();
 }
-
-void drawIsland()
+/*draw a vector with it's origin at x,y to <a,b> scaled by s and normalized
+ * if n is true. Color this vector according to cr, cg, and cb*/
+void drawVector(float x, float y, float a, float b, float s, bool n, float cr, float cg, float cb)
 {
-	glBegin(GL_QUAD_STRIP);
-	glColor3f(1,1,0);
-	glVertex3f(-.15,-1,0);
-	glVertex3f(-.15,.2,0);
-	glVertex3f(.15,-1,0);
-	glVertex3f(.15,.2,0);
-	glEnd();
-}
+	if(n)
+	{
+		float c = fabs(sqrt((a*a)+(b*b)));
+		a /= c;
+		b /= c;
+	}
 
-
-void drawVector(float x, float y, float a, float b, float s, float cr, float cg, float cb)
-{
-    //draw a vector, I don't think we'll ever end up using normalize,
-    //add color args	
     glColor3f(cr,cg,cb);
     glBegin(GL_LINES);
-   
+  	 
     glVertex3f(x, y, 0);
     glVertex3f(x+(a * s), y+(b * s), 0);
     glEnd();
@@ -79,24 +96,35 @@ void drawAxes(float l)
 void drawOcean() 
 {
 	/*variable declaration*/
-	float k = (2 * PI) / WL; /*effectively PI, open to change*/
+	float k = (2 * M_PI) / WL; /*effectively PI, open to change*/
     float x = 0; 
     float y = 0;
+	//perhaps make stepsize global, we're going to need it for drawing boats
     float stepSize = (R_MAX - L_MAX)/SEGMENTS;
- 
-	if(wave_norm_flag)
+
+	/*unfortunately we have to use two loops for this, otherwise
+	 *the vectors get draw into the quad strip*/
+	if(wave_tang_flag || wave_norm_flag)
     {
-        //This is incredible clunky
+        //This is incredibly clunky
         float dy;
         for(int i = 0; i <= SEGMENTS; i++)
         {
             x = (i * stepSize) + L_MAX;
-            y = AMP * sinf((k * x) + ((PI/4.0) * g.t));
+            y = AMP * sinf((k * x) + ((M_PI/4.0) * g.t));
             /*printf("%f <- x\n", x);*/
-            dy = (k * AMP) * cosf((k * x) + ((PI/4.0) * g.t));
+            dy = (k * AMP) * cosf((k * x) + ((M_PI/4.0) * g.t));
 
             //printf("%f <- dy\n\n", dy);
-            drawVector(x, y, 1, dy, .1, 1.0, 0.0, 0.0);         
+			if(wave_tang_flag)
+			{
+            	drawVector(x, y, 1, dy, .1, true, 1.0, 0.0, 0.0);         
+			}
+
+			if(wave_norm_flag)
+			{
+				drawVector(x,y,-dy, 1, .1, true, 0.0, 1.0, 0.0);
+			}
         }
     }
 
@@ -111,11 +139,11 @@ void drawOcean()
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     }
     glBegin(GL_QUAD_STRIP);
-   	glColor4f(0,.7,1.0,.55);
+   	glColor4f(0,.7,1.0,.45);
     for(int i = 0; i <= SEGMENTS; i++)
     {
         x = (i * stepSize) + L_MAX;
-        y = AMP * sinf((k * x) + ((PI/4.0) * g.t));
+        y = AMP * sinf((k * x) + ((M_PI/4.0) * g.t));
         /*printf("%f <- x\n", x);
         printf("%f <- y\n\n", y);*/
         glVertex3f(x, y, 1.0);
@@ -124,8 +152,6 @@ void drawOcean()
     glEnd();
     
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
-
     //reset poly mode.
 
     return;
@@ -138,9 +164,13 @@ void display()
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    /*Do game over testing before we draw anything*/
 	drawAxes(1.0);
-	drawIsland();
+	drawIsland(&tasmania);
+	drawBoat(&leftBoat, BOAT_SCALE);
+	drawBoat(&rightBoat, BOAT_SCALE);
     drawOcean();
+
 
     if((err = glGetError()))
     {
@@ -164,7 +194,7 @@ int main(int argc, char **argv)
 {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
-	glutInitWindowSize(700, 700);
+	glutInitWindowSize(500, 500);
     glutCreateWindow("Island defence 2D");
 
     init();
