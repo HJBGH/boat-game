@@ -7,11 +7,14 @@
 typedef struct
 {
 	bool left;/*used when programming control behaviour*/
-	int health;
+	int hp;
 	float x; /*y gets calculated later, it doesn't have to be stored*/
 	float gun_elev; /*gun elevation in degrees*/
 	float colors[3];
 } Boat;
+
+extern Boat leftBoat;
+extern Boat rightBoat;
 
 void drawBoat(const Boat * boot, float s);
 #endif

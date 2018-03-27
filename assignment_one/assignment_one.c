@@ -17,7 +17,7 @@ Global g;
 Boat leftBoat = 
 {
 	.left = true,
-	.health = 10,
+	.hp = 10,
 	.x = -.5,
 	.gun_elev = 30,
 	.colors = {1, 0, 0}
@@ -27,7 +27,7 @@ Boat leftBoat =
 Boat rightBoat = 
 {
 	.left = false,
-	.health = 10,
+	.hp = 10,
 	.x = .5,
 	.gun_elev = 30,
 	.colors = {0, 0, 1}
@@ -43,10 +43,10 @@ void idle()
     glutPostRedisplay();
 }
 
+/*draw a vector with it's origin at x,y to <a,b> scaled by s and normalized
+ * if n is true. Color this vector according to cr, cg, and cb*/
 void drawVector(float x, float y, float a, float b, float s, bool n, float cr, float cg, float cb)
 {
-    //draw a vector, I don't think we'll ever end up using normalize,
-    //add color args
 	if(n)
 	{
 		float c = fabs(sqrt((a*a)+(b*b)));
@@ -141,8 +141,6 @@ void drawOcean()
     glEnd();
     
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
-
     //reset poly mode.
 
     return;
@@ -155,10 +153,12 @@ void display()
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    /*Do game over testing before we draw anything*/
 	drawAxes(1.0);
 	drawBoat(&leftBoat, BOAT_SCALE);
 	drawBoat(&rightBoat, BOAT_SCALE);
     drawOcean();
+
 
     if((err = glGetError()))
     {
