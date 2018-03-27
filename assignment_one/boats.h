@@ -6,7 +6,7 @@
 #define BOAT
 typedef struct
 {
-	bool left;/*used when programming control behaviour*/
+	bool left;/*used when programming drawBoat function*/
 	int hp;
 	float x; /*y gets calculated later, it doesn't have to be stored*/
 	float gun_elev; /*gun elevation in degrees*/

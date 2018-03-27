@@ -3,5 +3,5 @@
 
 void drawIsland(const Island * i)
 {
-    //TODO: draw the island, YEA
+    
 }
