@@ -24,6 +24,7 @@
 #define SEGMENTS 100
 #define L_MAX -1.0
 #define R_MAX 1.0
+#define CENTER 0
 #define AMP .2
 #define WL 1
 #define M_PI 3.14159265358979323846264338327

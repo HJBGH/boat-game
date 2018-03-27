@@ -34,19 +34,23 @@ void keyboard(unsigned char key, int x, int y)
         printf("moving left boat left\n");
         /*I'm not sure it's a good idea to calculate boat movement in
          * here*/
-        leftBoat.x-=leftBoat.s*g.dt;
+        if(leftBoat.x >  L_MAX)
+            leftBoat.x-=leftBoat.s*g.dt;
         break;
     case 'd':
         printf("moving left boat right\n");
-        leftBoat.x+=leftBoat.s*g.dt;
+        if(leftBoat.x <= CENTER)
+            leftBoat.x+=leftBoat.s*g.dt;
         break;
     case 'l':
         printf("moving right boat right\n");
-        rightBoat.x+=rightBoat.s*g.dt;
+        if(rightBoat.x < R_MAX)
+            rightBoat.x+=rightBoat.s*g.dt;
         break;
     case 'j':
         printf("moving right boat left\n");
-        rightBoat.x-=rightBoat.s*g.dt;
+        if(rightBoat.x >= CENTER)
+            rightBoat.x-=rightBoat.s*g.dt;
         break;
     default:
         break;
