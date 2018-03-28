@@ -25,9 +25,11 @@ void keyboard(unsigned char key, int x, int y)
 		wave_tang_flag = !wave_tang_flag;	
 		break;
     case 'w':
-        printf("toggling wave wireframe\n");
-        wave_wire_flag = !wave_wire_flag;
+        wave_wire_flag = true;
         break;
+	case 'p':
+		wave_wire_flag = false;
+		break;
 	case '+':
 		if(segments < MAX_T)
 		{	
