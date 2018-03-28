@@ -4,9 +4,9 @@
 TARGET = assignment_one
 LDFLAGS = -lGL -lGLU -lglut -lm
 CFLAGS = -Wall -std=c99
-HEADERS = includes.h keyboard.h boats.h island.h
-$(TARGET): $(TARGET).c keyboard.o boats.o island.o
-	gcc $(TARGET).c keyboard.c boats.c island.c -o $(TARGET) $(LDFLAGS) $(CFLAGS)
+HEADERS = includes.h keyboard.h boats.h island.h projectiles.h
+$(TARGET): $(TARGET).c keyboard.o boats.o island.o projectiles.o
+	gcc $(TARGET).c keyboard.c boats.c island.c projectiles.c -o $(TARGET) $(LDFLAGS) $(CFLAGS)
 
 %.o: %.c $(HEADERS)
 	gcc $(CFLAGS) -c $<

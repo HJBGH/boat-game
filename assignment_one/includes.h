@@ -30,7 +30,8 @@
 /*MAX_T and MIN_T are limits on the tesselation of the waves*/
 #define MAX_T 256
 #define MIN_T 4
-
+#define MAG_DEPTH 6 /*this is an arbitrarily chosen limit on the array of
+projectile pointers, MAG being magazine*/
 
 #endif
 

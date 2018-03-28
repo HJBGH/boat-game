@@ -2,6 +2,7 @@
 #include "keyboard.h"
 #include "boats.h"
 #include "island.h"
+#include "projectiles.h"
 
 #define BOAT_GUN_S 9 /*gun rotation speed*/
 #define BOAT_SCALE .1
@@ -9,14 +10,14 @@
 #define BOAT_HP 10
 #define TAS_HP 100
 
-/*initialize the global flags they were declared in includes.h*/
+/*initialize the global flags that were declared in includes.h*/
 bool wave_wire_flag = false;
 bool wave_norm_flag = false;
 bool wave_tang_flag = false;
 int segments = 64;
 
-/*There will need to be a bunch of flags up here to handle game setting toggles
- * on the key board*/
+Proj2Vec2f *mag[MAG_DEPTH];
+
 Global g;
 
 Island tasmania = 
@@ -48,7 +49,6 @@ Boat rightBoat =
     .s = BOAT_SPEED,
 	.gun_rot_s = BOAT_GUN_S
 };
-
 
 void idle()
 {
@@ -189,6 +189,13 @@ void init()
     /* In this program these OpenGL calls only need to be done once,
       but normally they would go elsewhere, e.g. display */
 
+	/*malloc projectile array in here*/
+	int i;
+	for(i = 0; i < MAG_DEPTH; i++)
+	{
+		mag[i] = (Proj2Vec2f*) malloc(sizeof(Proj2Vec2f*));
+		printf("Projectile memory allocated\n");
+	}
     glMatrixMode(GL_PROJECTION);
     glOrtho(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0);
     glMatrixMode(GL_MODELVIEW);
