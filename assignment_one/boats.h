@@ -13,7 +13,7 @@ typedef struct
 	float colors[3];
     float s; /*s for SPEED, gotta go FAST*/
 	float gun_rot_s; /*gun rotation speed*/
-	/*may need a "cooldown_t" var to track how much time is left on the cd*/
+	float cd; /*cooldown*/
 } Boat;
 
 extern Boat leftBoat;

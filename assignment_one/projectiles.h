@@ -8,6 +8,8 @@ typedef struct {float x, y;} Vec2f;
 typedef struct
 {
 	bool fired; /*used when deciding how to draw this*/
+	float s; /*launch velocity, used to calculate components of p and d 
+	as the barrel angle changes*/
 	Vec2f p;
 	Vec2f d;
 	/* p tracks current position, 

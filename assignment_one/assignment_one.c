@@ -52,6 +52,8 @@ Boat rightBoat =
 
 void idle()
 {
+	/*
+	 * I should be updating cooldowns in here*/
     g.lastT = g.t;
     g.t = glutGet(GLUT_ELAPSED_TIME) / 1000.0;
     g.dt = g.t - g.lastT; 
@@ -174,7 +176,15 @@ void display()
 	drawBoat(&leftBoat, BOAT_SCALE);
 	drawBoat(&rightBoat, BOAT_SCALE);
     drawOcean();
-
+	/*need to do barrel loading, maybe cannon should be its own struct*/
+	if(tasmania.cd == 0)
+	{
+		/* find a free projectile */
+		/* find the x and y component of the cannon's barrel vector given
+		 * gun_elev */
+		/* call drawTraj(const Proj2Vec2f * shell) with the projectile as an
+		 * arguement */
+	}
 
     if((err = glGetError()))
     {
