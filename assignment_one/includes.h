@@ -21,7 +21,6 @@
 #define OCEAN_FLOOR -1
 //segments will eventually have to be a var not a def in order to facilitate
 //wave resolution modification
-#define SEGMENTS 100
 #define L_MAX -1.0
 #define R_MAX 1.0
 #define CENTER 0
@@ -29,8 +28,8 @@
 #define WL 1
 #define M_PI 3.14159265358979323846264338327
 /*MAX_T and MIN_T are limits on the tesselation of the waves*/
-#define MAX_T 100
-#define MIN_T 8
+#define MAX_T 256
+#define MIN_T 4
 
 
 #endif

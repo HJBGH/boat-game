@@ -29,18 +29,19 @@ void keyboard(unsigned char key, int x, int y)
         wave_wire_flag = !wave_wire_flag;
         break;
 	case '+':
-		if(segments <= MAX_T)
+		if(segments < MAX_T)
 		{	
 			printf("increasing wave tesselation\n");
-			segments++;
+			segments *= 2;
 			printf("Wave tesselation is incresed to %d\n", segments);
 		}
 		break;
 	case '-':
-		if(segments >= MIN_T)
+		if(segments > MIN_T)
 		{	
 			printf("decreasing wave tesselation\n");
-			segments--;
+			segments /= 2;
+			printf("Wave tesseleation is decreased to %d\n", segments);
 		}
 		break;
     /*movement controls*/

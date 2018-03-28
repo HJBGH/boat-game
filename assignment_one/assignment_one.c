@@ -7,13 +7,13 @@
 #define BOAT_SCALE .1
 #define BOAT_SPEED .3 /*slow boats*/
 #define BOAT_HP 10
-#define ISLAND_HP 100
+#define TAS_HP 100
 
 /*initialize the global flags they were declared in includes.h*/
 bool wave_wire_flag = false;
 bool wave_norm_flag = false;
 bool wave_tang_flag = false;
-int segments = 80;
+int segments = 64;
 
 /*There will need to be a bunch of flags up here to handle game setting toggles
  * on the key board*/
@@ -21,7 +21,7 @@ Global g;
 
 Island tasmania = 
 {
-	.hp = ISLAND_HP,
+	.hp = TAS_HP,
 	.gun_elev = 0,
 	.gun_rot_s = 16
 };
@@ -112,7 +112,7 @@ void drawOcean()
     {
         //This is incredibly clunky
         float dy;
-        for(int i = 0; i <= SEGMENTS; i++)
+        for(int i = 0; i <= segments; i++)
         {
             x = (i * stepSize) + L_MAX;
             y = AMP * sinf((k * x) + ((M_PI/4.0) * g.t));
@@ -144,7 +144,7 @@ void drawOcean()
     }
     glBegin(GL_QUAD_STRIP);
    	glColor4f(0,.7,1.0,.45);
-    for(int i = 0; i <= SEGMENTS; i++)
+    for(int i = 0; i <= segments; i++)
     {
         x = (i * stepSize) + L_MAX;
         y = AMP * sinf((k * x) + ((M_PI/4.0) * g.t));
