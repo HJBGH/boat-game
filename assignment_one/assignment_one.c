@@ -9,7 +9,7 @@
 #define BOAT_SPEED .3 /*slow boats*/
 #define BOAT_HP 10
 #define TAS_HP 100
-#define SHELL_S .1 /*muzzle velocity of projectiles*/
+#define SHELL_S .2 /*muzzle velocity of projectiles*/
 
 /*initialize the global flags that were declared in includes.h*/
 bool wave_wire_flag = false;
