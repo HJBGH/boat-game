@@ -40,14 +40,14 @@ void drawProj(const Proj2Vec2f * shell)
  * how much I change them in assignment_one.c*/
 void updateProj(Proj2Vec2f * shell)
 {
-	printf("Updating the projectile at address %p\n", shell);
+	//printf("Updating the projectile at address %p\n", shell);
 	/*perform numerical integration on projectiles*/
 	(*shell).p.y += (*shell).d.y * g.dt;
 	(*shell).p.x += (*shell).d.x * g.dt;
 	(*shell).d.y += GRAV * g.dt;
 	/*we're never going to see it again if it goes past these
 	 * bounds so reset all the variables and make it eligible for use again*/
-	if((*shell).p.x < L_MAX || (*shell).p.x > R_MAX)
+	if(((*shell).p.x < L_MAX || (*shell).p.x > R_MAX) || (*shell).p.y < -1*AMP)
 	{
 		(*shell).p.y = 2;
 		(*shell).p.x = 2;

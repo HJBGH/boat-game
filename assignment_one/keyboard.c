@@ -1,7 +1,7 @@
 /* You can ignore this for now, it just lets you exit when you press 'q' or ESC */
 #include "keyboard.h"
 
-
+void shellHelper(); /*define later*/
 
 /*There will need to be interactions with extern vars in order to handle 
  * keyboard input from this file*/
@@ -71,19 +71,37 @@ void keyboard(unsigned char key, int x, int y)
         break;
 	/*cannon controls*/
 	case 'f':
-		if(tasmania.gun_elev < 160)
+		if(tasmania.gun_elev < 170)
 		{
 			printf("Island gun rotating left\n");
 			tasmania.gun_elev += tasmania.gun_rot_s * g.dt;
 			printf("%f - island gun elevation\n", tasmania.gun_elev);
+			shellHelper();
 		}
 		break;
 	case 'h':
-		if(tasmania.gun_elev > 20)
+		if(tasmania.gun_elev > 10)
 		{
 			printf("Island gun rotating right\n");
 			tasmania.gun_elev -= tasmania.gun_rot_s * g.dt;
 			printf("%f - island gun elevation\n", tasmania.gun_elev);
+			if(tasmania.shellp != NULL)
+			{
+				(tasmania.shellp)->p.x = ISLAND_GUN_L * 
+								cosf((M_PI * tasmania.gun_elev) / 180);
+								/*I HATE RADIANS*/
+			/*muzzle x co-ord*/	
+			printf("Tasmania gun elev -> %f\n", (tasmania.gun_elev));
+			printf("I don't even know %f\n", (tasmania.shellp)->p.x);
+			(tasmania.shellp)->p.y = 
+						ISLAND_GUN_L * sinf((M_PI * tasmania.gun_elev) / 180) 
+									+ HEIGHT_OVER_X; 
+			/*muzzle y co-ord*/
+			/*calculate initial velocities*/
+			(tasmania.shellp)->d.x = SHELL_S * cosf((M_PI * tasmania.gun_elev)/180);
+			(tasmania.shellp)->d.y = SHELL_S * sinf((M_PI * tasmania.gun_elev)/180);	
+			}
+
 		}
 		break;	
 	case 'g': /*tasmania fires its cannon*/
@@ -134,5 +152,28 @@ void keyboard(unsigned char key, int x, int y)
     default:
         break;
     }
+}
+
+void shellHelper()
+{
+	/*recalculates projectile attributes based on cannon orientation,
+	 * I should creat a cannon struct with dedicated support for this stuff,
+	 * note-to-self for assignment 2*/
+	if(tasmania.shellp != NULL)
+	{
+		(tasmania.shellp)->p.x = ISLAND_GUN_L * 
+							cosf((M_PI * tasmania.gun_elev) / 180);
+							/*I HATE RADIANS*/
+		/*muzzle x co-ord*/	
+		printf("Tasmania gun elev -> %f\n", (tasmania.gun_elev));
+		printf("I don't even know %f\n", (tasmania.shellp)->p.x);
+		(tasmania.shellp)->p.y = 
+					ISLAND_GUN_L * sinf((M_PI * tasmania.gun_elev) / 180) 
+								+ HEIGHT_OVER_X; 
+		/*muzzle y co-ord*/
+		/*calculate initial velocities*/
+		(tasmania.shellp)->d.x = SHELL_S * cosf((M_PI * tasmania.gun_elev)/180);
+		(tasmania.shellp)->d.y = SHELL_S * sinf((M_PI * tasmania.gun_elev)/180);	
+	}
 }
 

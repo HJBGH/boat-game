@@ -9,7 +9,6 @@
 #define BOAT_SPEED .3 /*slow boats*/
 #define BOAT_HP 10
 #define TAS_HP 100
-#define SHELL_S .2 /*muzzle velocity of projectiles*/
 
 /*initialize the global flags that were declared in includes.h*/
 bool wave_wire_flag = false;
@@ -226,7 +225,7 @@ void display()
 	/*draw trajectories, draw projectiles, loop through mag*/
 	for(int i = 0; i < MAG_DEPTH; i++)
 	{
-		if((*mag[i]).loaded == true)
+		if((*mag[i]).loaded == true ||(*mag[i]).fired == true)
 		{
 			drawTraj((mag[i]));
 		}
