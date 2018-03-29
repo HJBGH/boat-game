@@ -12,15 +12,17 @@ void drawIsland(const Island * i)
 	glEnd();
 	//Do transforms then draw cannon
 	glPushMatrix();
+	//glLoadIdentity();	
 	glTranslatef(0,HEIGHT_OVER_X,0);
 	/*TODO !!!!!!!!! double check cannon specs*/
 	glRotatef((*i).gun_elev, 0, 0, 1);
 	glBegin(GL_QUAD_STRIP);
-	glVertex3f(-.025,0,0);
-	glVertex3f(-.025,ISLAND_GUN_L,0);
-	glVertex3f(.025,0,0);
-	glVertex3f(.025,ISLAND_GUN_L,0);
+	glVertex3f(ISLAND_GUN_L,.025,0);
+	glVertex3f(ISLAND_GUN_L,-0.025,0);
+	glVertex3f(0,.025,0);
+	glVertex3f(0,-0.025,0);
 	glEnd();
 	glPopMatrix();
+	glLoadIdentity();
 
 }

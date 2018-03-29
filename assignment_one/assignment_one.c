@@ -9,7 +9,7 @@
 #define BOAT_SPEED .3 /*slow boats*/
 #define BOAT_HP 10
 #define TAS_HP 100
-#define SHELL_S .3 /*muzzle velocity of projectiles*/
+#define SHELL_S .1 /*muzzle velocity of projectiles*/
 
 /*initialize the global flags that were declared in includes.h*/
 bool wave_wire_flag = false;
@@ -24,7 +24,7 @@ Global g;
 Island tasmania = 
 {
 	.hp = TAS_HP,
-	.gun_elev = 0,
+	.gun_elev = 30,
 	.gun_rot_s = 16
 };
 
@@ -86,14 +86,19 @@ void idle()
 				break;
 			}
 		}
-		(tasmania.shellp)->p.x = ISLAND_GUN_L * cosf(tasmania.gun_elev); 
+		(tasmania.shellp)->p.x = ISLAND_GUN_L * 
+								cosf((M_PI * tasmania.gun_elev) / 180);
+								/*I HATE RADIANS*/
 		/*muzzle x co-ord*/	
+		printf("Tasmania gun elev -> %f\n", (tasmania.gun_elev));
+		printf("I don't even know %f\n", (tasmania.shellp)->p.x);
 		(tasmania.shellp)->p.y = 
-					(ISLAND_GUN_L * sinf(tasmania.gun_elev) + HEIGHT_OVER_X); 
+						ISLAND_GUN_L * sinf((M_PI * tasmania.gun_elev) / 180) 
+									+ HEIGHT_OVER_X; 
 		/*muzzle y co-ord*/
 		/*calculate initial velocities*/
-		(tasmania.shellp)->d.x = SHELL_S * cosf(tasmania.gun_elev);
-		(tasmania.shellp)->d.y = SHELL_S * sinf(tasmania.gun_elev);
+		(tasmania.shellp)->d.x = SHELL_S * cosf((M_PI * tasmania.gun_elev)/180);
+		(tasmania.shellp)->d.y = SHELL_S * sinf((M_PI * tasmania.gun_elev)/180);
 	}
 	/*reload boat shells*/
 	/*update shell info, i.e. p co-ords change according to d co-ords*/
@@ -173,9 +178,6 @@ void drawOcean()
         }
     }
 
-
-    /*need to add facilities for lowering resolution/drawing tan/wireframe/
-     * drawing ortho*/
     if(wave_wire_flag)
     {
         /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

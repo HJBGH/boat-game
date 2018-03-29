@@ -1,6 +1,7 @@
 #include "projectiles.h"
 
 #define SEGMENTS 16
+#define T 8.0 /*T being the number of seconds we wish to project into*/
 
 void drawTraj(const Proj2Vec2f * shell)
 {
@@ -15,11 +16,13 @@ void drawTraj(const Proj2Vec2f * shell)
 	/*euler numerical integration*/
 	glBegin(GL_LINE_STRIP);
     glColor3f(1,1,1);
-	for(int i = 0; i < SEGMENTS; i++)
+
+	for(float i = 0; i < T; i += T/SEGMENTS)
 	{
 		glVertex3f(x, y, 0);
-		y += dy;
-		x += dx;
+		y += dy * (T/SEGMENTS);
+		x += dx * (T/SEGMENTS);
+		dy += GRAV * (T/SEGMENTS);
 	}
 	glEnd();
 }

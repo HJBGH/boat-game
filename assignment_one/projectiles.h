@@ -2,7 +2,7 @@
 
 #ifndef BANGBANG
 #define BANGBANG
-#define GRAV_CONST -9.8
+#define GRAV -.098
 /*taken from projectile tute, best way to do it afaik*/
 typedef struct {float x, y;} Vec2f;
 typedef struct
