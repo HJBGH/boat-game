@@ -101,7 +101,13 @@ void idle()
 		(tasmania.shellp)->d.y = SHELL_S * sinf((M_PI * tasmania.gun_elev)/180);
 	}
 	/*reload boat shells*/
-	/*update shell info, i.e. p co-ords change according to d co-ords*/
+	for(int i = 0; i < MAG_DEPTH; i++)
+	{
+		if(mag[i]->fired == true)
+		{
+			updateProj(mag[i]);
+		}
+	}
     glutPostRedisplay();
 }
 /*draw a vector with it's origin at x,y to <a,b> scaled by s and normalized
@@ -224,6 +230,10 @@ void display()
 		{
 			drawTraj((mag[i]));
 		}
+		if((*mag[i]).fired == true)
+		{
+			drawProj((mag[i]));
+		}
 	}
 
 	/*iterate through mag, draw each shell and their trajectory 
@@ -248,7 +258,10 @@ void init()
 	{
 		mag[i] = (Proj2Vec2f*) malloc(sizeof(Proj2Vec2f*));
 		printf("Projectile memory allocated\n");
+		(*mag[i]).fired = false;
+		(*mag[i]).loaded = false;
 	}
+	/*Need to write over the already in memory*/
     glMatrixMode(GL_PROJECTION);
     glOrtho(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0);
     glMatrixMode(GL_MODELVIEW);

@@ -111,9 +111,9 @@ void updateProjectileState(float t, float dt)
 
 void displayProjectile(void)
 {
-  glutWireSphere(0.05, 10,10);
-  //glBegin(GL_POINTS);
-  //glVertex2f(projectile.r.x, projectile.r.y);
+	glPointSize(5.0);
+  glBegin(GL_POINTS);
+  glVertex2f(projectile.r.x, projectile.r.y);
   glEnd();
 }
 

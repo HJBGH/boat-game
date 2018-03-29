@@ -20,6 +20,7 @@ typedef struct
 
 void drawTraj(const Proj2Vec2f * shell);
 void drawProj(const Proj2Vec2f * shell);
+void updateProj(Proj2Vec2f * shell);
 
 extern Proj2Vec2f *mag[MAG_DEPTH];/*MAG_DEPTH is define in includes.h*/
 
