@@ -8,6 +8,7 @@ typedef struct {float x, y;} Vec2f;
 typedef struct
 {
 	bool fired; /*used when deciding how to draw this*/
+	bool loaded; /*so two cannons don't use same projectile*/
 	float s; /*launch velocity, used to calculate components of p and d 
 	as the barrel angle changes*/
 	Vec2f p;

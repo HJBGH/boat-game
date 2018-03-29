@@ -9,6 +9,7 @@
 #define BOAT_SPEED .3 /*slow boats*/
 #define BOAT_HP 10
 #define TAS_HP 100
+#define SHELL_S .3 /*muzzle velocity of projectiles*/
 
 /*initialize the global flags that were declared in includes.h*/
 bool wave_wire_flag = false;
@@ -58,6 +59,44 @@ void idle()
     g.t = glutGet(GLUT_ELAPSED_TIME) / 1000.0;
     g.dt = g.t - g.lastT; 
     //printf("idle function called\n");
+	if(tasmania.cd > 0)
+	{
+		/*this is not a robust way of doing things*/
+		tasmania.cd -= g.dt;
+		if(tasmania.cd < 0)
+		{
+			tasmania.cd = 0;
+		}
+	}	
+	if(tasmania.cd == 0 && tasmania.shellp == NULL)
+	{
+		/* find a free projectile */
+		/*this is somewhat precarious, if no free projectile
+		 * can be found there'll be problems.
+		 * I'm also not 100 percent sure that I should be handling cooldown
+		 * behaviour in here
+		 * */
+		for(int i = 0; i < MAG_DEPTH; i++)
+		{
+			if((*mag[i]).loaded == false && (*mag[i]).fired == false)
+			{
+				mag[i]->loaded = true;
+				tasmania.shellp = mag[i];
+				printf("new shell loaded into island cannon\n");
+				break;
+			}
+		}
+		(tasmania.shellp)->p.x = ISLAND_GUN_L * cosf(tasmania.gun_elev); 
+		/*muzzle x co-ord*/	
+		(tasmania.shellp)->p.y = 
+					(ISLAND_GUN_L * sinf(tasmania.gun_elev) + HEIGHT_OVER_X); 
+		/*muzzle y co-ord*/
+		/*calculate initial velocities*/
+		(tasmania.shellp)->d.x = SHELL_S * cosf(tasmania.gun_elev);
+		(tasmania.shellp)->d.y = SHELL_S * sinf(tasmania.gun_elev);
+	}
+	/*reload boat shells*/
+	/*update shell info, i.e. p co-ords change according to d co-ords*/
     glutPostRedisplay();
 }
 /*draw a vector with it's origin at x,y to <a,b> scaled by s and normalized
@@ -176,15 +215,17 @@ void display()
 	drawBoat(&leftBoat, BOAT_SCALE);
 	drawBoat(&rightBoat, BOAT_SCALE);
     drawOcean();
-	/*need to do barrel loading, maybe cannon should be its own struct*/
-	if(tasmania.cd == 0)
+	/*draw trajectories, draw projectiles, loop through mag*/
+	for(int i = 0; i < MAG_DEPTH; i++)
 	{
-		/* find a free projectile */
-		/* find the x and y component of the cannon's barrel vector given
-		 * gun_elev */
-		/* call drawTraj(const Proj2Vec2f * shell) with the projectile as an
-		 * arguement */
+		if((*mag[i]).loaded == true)
+		{
+			drawTraj((mag[i]));
+		}
 	}
+
+	/*iterate through mag, draw each shell and their trajectory 
+	 * if they're available*/
 
     if((err = glGetError()))
     {

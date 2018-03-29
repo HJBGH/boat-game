@@ -84,6 +84,22 @@ void keyboard(unsigned char key, int x, int y)
 			tasmania.gun_elev -= tasmania.gun_rot_s * g.dt;
 		}
 		break;	
+	case 'g': /*tasmania fires its cannon*/
+		/*it might be worthwhile to abstract this into it's own function,
+		 * along with a cannon struct*/
+		if(tasmania.cd <= 0 && tasmania.shellp != NULL)
+		{
+			printf("island shell fired\n");
+			tasmania.cd = 1;/* 1000 millisecond (1 second) cooldown*/
+			(tasmania.shellp)->fired = true; 
+			(tasmania.shellp)->loaded = false;
+			/*setting fired to true causes the shell to start to change
+			 * position, setting loaded to false means other cannons
+			 * can use it once it's added back to the pool*/
+			tasmania.shellp = NULL;
+			/*this shell isn't associated with the cooldown*/
+		}
+		break;
 	case 'O':
 		if(rightBoat.gun_elev > 10)
 		{
