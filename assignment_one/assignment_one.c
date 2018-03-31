@@ -137,6 +137,9 @@ void idle()
 		(rightBoat.shellp)->d.x = SHELL_S * cosf((M_PI * rightBoat.gun_elev)/180);
 		(rightBoat.shellp)->d.y = SHELL_S * sinf((M_PI * rightBoat.gun_elev)/180);
 	}
+	updateBoatShell(&rightBoat);
+	/*Island shell never needs to be updated manually as the island never 
+	 * moves*/
 	for(int i = 0; i < MAG_DEPTH; i++)
 	{
 		if(mag[i]->fired == true)

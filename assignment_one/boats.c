@@ -1,7 +1,7 @@
 #include "includes.h"
 #include "boats.h"
-#define WHY_IS_X_ZERO 90
-
+#define X_GUN_OFFSET .5
+#define Y_GUN_OFFSET .25
 
 /*TODO: Consider declaring structs to store the vertices of the boats
  * */
@@ -43,7 +43,7 @@ void drawBoat(const Boat * boot, float s)
 	/*draw gun, this requires some reasoning about boat orientation*/
 	if((*boot).left)
 	{
-		glTranslatef(.5,.25,0);
+		glTranslatef(Y_GUN_OFFSET,Y_GUN_OFFSET,0);
 		glRotatef((*boot).gun_elev, 0, 0, 1);
 		//glTranslatef(0,-.0625,0);
 		glBegin(GL_POLYGON);
@@ -54,7 +54,7 @@ void drawBoat(const Boat * boot, float s)
 	}
 	else
 	{
-		glTranslatef(-.5,.25,0);
+		glTranslatef(-X_GUN_OFFSET,Y_GUN_OFFSET,0);
 		glRotatef((*boot).gun_elev, 0, 0, 1);
 		//glTranslatef(0,-.0625,0);
 		glBegin(GL_POLYGON);
@@ -69,23 +69,45 @@ void drawBoat(const Boat * boot, float s)
 	glLoadIdentity(); //just to be safe
 }	
 
+/*TODO: refactor so that I'm not using '->' and '(*boot).' interchangebly*/
+/*ALSO: add some better comments*/
 void updateBoatShell(const Boat * boot)
 {
 	if((*boot).shellp != NULL)
 	{
 	    float y = AMP * sinf((k * (*boot).x) + ((M_PI/4.0) * g.t));
-		((*boot).shellp)->p.x = (*boot).x;/*BOAT_GUN_L * 
-							cosf((M_PI * (*boot).gun_elev) / 180);*/
-				/*muzzle x co-ord*/	
-		printf("Right boat gun elev -> %f\n", ((*boot).gun_elev));
-		printf("I don't even know %f\n", ((*boot).shellp)->p.x);
-		((*boot).shellp)->p.y = y + ((BOAT_GUN_L * 
-						sinf((M_PI * (*boot).gun_elev) / 180)) * BOAT_SCALE);
+		float dy = (k * AMP) * cosf((k * (*boot).x) + ((M_PI/4.0) * g.t));
+		float rad_theta = atan(dy);
+		printf("theta %f\n", rad_theta);
+		/*calculate x offset, then y offset*/
+		float c = sqrt((X_GUN_OFFSET * X_GUN_OFFSET) + 
+						(Y_GUN_OFFSET * Y_GUN_OFFSET)) * BOAT_SCALE;
+		float rad_w = atan(Y_GUN_OFFSET/X_GUN_OFFSET);
+		float xso = c * (cosf((M_PI/2) - (rad_theta + rad_w)) * (180/M_PI));
+		float yso = c * (sinf((M_PI/2) - (rad_theta + rad_w)) * (180/M_PI));
+		printf("cosine: %f\n", cosf((M_PI/2) - (rad_theta + rad_w)) * (180/M_PI));
+		printf("c: %f\n", c);
+		printf("xso: %f, yso: %f\n", xso, yso);
+		
+		if(!(boot->left))
+		{
+			xso = -xso;
+		}
+		xso *= BOAT_SCALE;
+		yso *= BOAT_SCALE;
+
+		/*calculate shell x*/
+		((*boot).shellp)->p.x = (*boot).x + xso; /*( BOAT_GUN_L 
+					* (cosf((M_PI * (*boot).gun_elev) / 180) + theta) *
+					BOAT_SCALE);*/
+		((*boot).shellp)->p.y = y + yso;
+		/*((BOAT_GUN_L * 
+						(sinf((M_PI * (*boot).gun_elev) / 180) + theta)) * BOAT_SCALE);*/
 		/*muzzle y co-ord*/
 		/*calculate initial velocities*/
 		((*boot).shellp)->d.x = SHELL_S * 
-								cosf((M_PI * (*boot).gun_elev)/180);
+								(cosf((M_PI * (*boot).gun_elev)/180));
 		((*boot).shellp)->d.y = SHELL_S * 
-								sinf((M_PI * (*boot).gun_elev)/180);	
+								(sinf((M_PI * (*boot).gun_elev)/180));	
 	}
 }

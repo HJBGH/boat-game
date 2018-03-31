@@ -38,6 +38,7 @@ void drawProj(const Proj2Vec2f * shell)
 
 /*only function allowed to change shell, this is irrelevant considering
  * how much I change them in assignment_one.c*/
+/*This only gets used while the projectile is in flight*/
 void updateProj(Proj2Vec2f * shell)
 {
 	//printf("Updating the projectile at address %p\n", shell);
