@@ -69,3 +69,23 @@ void drawBoat(const Boat * boot, float s)
 	glPopMatrix();
 	glLoadIdentity(); //just to be safe
 }	
+
+void updateBoatShell(const Boat * boot)
+{
+	if((*boot).shellp != NULL)
+	{
+		((*boot).shellp)->p.x = (*boot).x;/*BOAT_GUN_L * 
+							cosf((M_PI * (*boot).gun_elev) / 180);*/
+				/*muzzle x co-ord*/	
+		printf("Right boat gun elev -> %f\n", ((*boot).gun_elev));
+		printf("I don't even know %f\n", ((*boot).shellp)->p.x);
+		((*boot).shellp)->p.y = BOAT_GUN_L * 
+						sinf((M_PI * (*boot).gun_elev) / 180);
+		/*muzzle y co-ord*/
+		/*calculate initial velocities*/
+		((*boot).shellp)->d.x = SHELL_S * 
+								cosf((M_PI * (*boot).gun_elev)/180);
+		((*boot).shellp)->d.y = SHELL_S * 
+								sinf((M_PI * (*boot).gun_elev)/180);	
+	}
+}

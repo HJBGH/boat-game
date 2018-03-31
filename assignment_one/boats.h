@@ -23,4 +23,7 @@ extern Boat leftBoat;
 extern Boat rightBoat;
 
 void drawBoat(const Boat * boot, float s);
+void updateBoatShell(const Boat * boot); 
+/*used to recalculate shell position while it's loaded in a boat and the boat
+ * is moving around*/
 #endif

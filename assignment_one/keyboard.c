@@ -62,13 +62,19 @@ void keyboard(unsigned char key, int x, int y)
     case 'l':
         printf("moving right boat right\n");
         if(rightBoat.x < R_MAX)
+		{
             rightBoat.x+=rightBoat.s*g.dt;
+			updateBoatShell(&rightBoat);
+		}
 		printf("right boat x %f\n", rightBoat.x);
         break;
     case 'j':
         printf("moving right boat left\n");
         if(rightBoat.x >= CENTER)
+		{
             rightBoat.x-=rightBoat.s*g.dt;
+			updateBoatShell(&rightBoat);	
+		}
 		printf("right boat x %f\n", rightBoat.x);
         break;
 	/*cannon controls*/
@@ -87,7 +93,8 @@ void keyboard(unsigned char key, int x, int y)
 			printf("Island gun rotating right\n");
 			tasmania.gun_elev -= tasmania.gun_rot_s * g.dt;
 			printf("%f - island gun elevation\n", tasmania.gun_elev);
-			/*perhaps move this to an update method*/
+			/*perhaps move this to an update method, THIS IS THE WRONG
+			 * PLACE TO BE DOING THIS, REFACTOR*/
 			if(tasmania.shellp != NULL)
 			{
 				(tasmania.shellp)->p.x = ISLAND_GUN_L * 
@@ -128,23 +135,7 @@ void keyboard(unsigned char key, int x, int y)
 		{
 			printf("Right boat gun elevating\n");
 			rightBoat.gun_elev -= rightBoat.gun_rot_s * g.dt;
-			if(rightBoat.shellp != NULL)
-			{
-				(rightBoat.shellp)->p.x = BOAT_GUN_L * 
-								cosf((M_PI * rightBoat.gun_elev) / 180);
-								/*I HATE RADIANS*/
-				/*muzzle x co-ord*/	
-				printf("Right boat gun elev -> %f\n", (rightBoat.gun_elev));
-				printf("I don't even know %f\n", (rightBoat.shellp)->p.x);
-				(rightBoat.shellp)->p.y = BOAT_GUN_L * 
-								sinf((M_PI * rightBoat.gun_elev) / 180);
-				/*muzzle y co-ord*/
-				/*calculate initial velocities*/
-				(rightBoat.shellp)->d.x = SHELL_S * 
-										cosf((M_PI * rightBoat.gun_elev)/180);
-				(rightBoat.shellp)->d.y = SHELL_S * 
-										sinf((M_PI * rightBoat.gun_elev)/180);	
-			}
+			updateBoatShell(&rightBoat);
 		}
 		break;
 	case 'o':
@@ -154,8 +145,9 @@ void keyboard(unsigned char key, int x, int y)
 			rightBoat.gun_elev += rightBoat.gun_rot_s * g.dt;
 			if(rightBoat.shellp != NULL)
 			{
-				(rightBoat.shellp)->p.x = BOAT_GUN_L * 
-								cosf((M_PI * rightBoat.gun_elev) / 180);
+				(rightBoat.shellp)->p.x = rightBoat.x;
+				/*BOAT_GUN_L * 
+								cosf((M_PI * rightBoat.gun_elev) / 180);*/
 				/*muzzle x co-ord*/	
 				printf("Right boat gun elev -> %f\n", (rightBoat.gun_elev));
 				printf("I don't even know %f\n", (rightBoat.shellp)->p.x);
@@ -192,6 +184,7 @@ void keyboard(unsigned char key, int x, int y)
     }
 }
 
+/*THis method shouldn't be in here*/
 void shellHelper()
 {
 	/*recalculates projectile attributes based on cannon orientation,
