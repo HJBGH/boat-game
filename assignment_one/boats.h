@@ -1,12 +1,14 @@
 #include "includes.h"
+#include "projectiles.h"
 /*Rotate by r, scale by s*/
 #ifndef BOAT
+#define BOAT
 #define MAX_ELEV 180
 #define MIN_ELEV 0
-#define BOAT
+#define BOAT_GUN_L .5
 typedef struct
 {
-	bool left;/*used when programming drawBoat function*/
+	bool left;/*used drawBoat function*/
 	int hp;
 	float x; /*y gets calculated later, it doesn't have to be stored*/
 	float gun_elev; /*gun elevation in degrees*/
@@ -14,6 +16,7 @@ typedef struct
     float s; /*s for SPEED, gotta go FAST*/
 	float gun_rot_s; /*gun rotation speed*/
 	float cd; /*cooldown*/
+	Proj2Vec2f * shellp;
 } Boat;
 
 extern Boat leftBoat;

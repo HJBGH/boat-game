@@ -44,7 +44,7 @@ Boat rightBoat =
 	.left = false,
 	.hp = BOAT_HP,
 	.x = .5,
-	.gun_elev = 30,
+	.gun_elev = 150,
 	.colors = {0, 0, 1},
     .s = BOAT_SPEED,
 	.gun_rot_s = BOAT_GUN_S
@@ -100,6 +100,43 @@ void idle()
 		(tasmania.shellp)->d.y = SHELL_S * sinf((M_PI * tasmania.gun_elev)/180);
 	}
 	/*reload boat shells*/
+	if(rightBoat.cd > 0)
+	{
+		/*this is not a robust way of doing things*/
+		rightBoat.cd -= g.dt;
+		if(rightBoat.cd < 0)
+		{
+			rightBoat.cd = 0;
+		}
+	}	
+	if(rightBoat.cd == 0 && rightBoat.shellp == NULL)
+	{
+		for(int i = 0; i < MAG_DEPTH; i++)
+		{
+			if((*mag[i]).loaded == false && (*mag[i]).fired == false)
+			{
+				mag[i]->loaded = true;
+				rightBoat.shellp = mag[i];
+				printf("new shell loaded into island cannon\n");
+				break;
+			}
+		}
+		/*
+		(rightBoat.shellp)->p.x = (BOAT_GUN_L * 
+								cosf((M_PI * rightBoat.gun_elev) / 180)) * BOAT_SCALE;*/
+		(rightBoat.shellp)->p.x = rightBoat.x;
+								/*I HATE RADIANS*/
+		/*muzzle x co-ord*/	
+		printf("Right boat gun elev -> %f\n", (rightBoat.gun_elev));
+		printf("I don't even know %f\n", (rightBoat.shellp)->p.x);
+		(rightBoat.shellp)->p.y = BOAT_GUN_L * 
+								sinf((M_PI * rightBoat.gun_elev) / 180) 
+								* BOAT_SCALE;
+		/*muzzle y co-ord*/
+		/*calculate initial velocities*/
+		(rightBoat.shellp)->d.x = SHELL_S * cosf((M_PI * rightBoat.gun_elev)/180);
+		(rightBoat.shellp)->d.y = SHELL_S * sinf((M_PI * rightBoat.gun_elev)/180);
+	}
 	for(int i = 0; i < MAG_DEPTH; i++)
 	{
 		if(mag[i]->fired == true)

@@ -1,6 +1,6 @@
 #include "projectiles.h"
 
-#define SEGMENTS 16
+#define SEGMENTS 32
 #define T 8.0 /*T being the number of seconds we wish to project into*/
 
 void drawTraj(const Proj2Vec2f * shell)

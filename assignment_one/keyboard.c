@@ -63,11 +63,13 @@ void keyboard(unsigned char key, int x, int y)
         printf("moving right boat right\n");
         if(rightBoat.x < R_MAX)
             rightBoat.x+=rightBoat.s*g.dt;
+		printf("right boat x %f\n", rightBoat.x);
         break;
     case 'j':
         printf("moving right boat left\n");
         if(rightBoat.x >= CENTER)
             rightBoat.x-=rightBoat.s*g.dt;
+		printf("right boat x %f\n", rightBoat.x);
         break;
 	/*cannon controls*/
 	case 'f':
@@ -85,6 +87,7 @@ void keyboard(unsigned char key, int x, int y)
 			printf("Island gun rotating right\n");
 			tasmania.gun_elev -= tasmania.gun_rot_s * g.dt;
 			printf("%f - island gun elevation\n", tasmania.gun_elev);
+			/*perhaps move this to an update method*/
 			if(tasmania.shellp != NULL)
 			{
 				(tasmania.shellp)->p.x = ISLAND_GUN_L * 
@@ -121,30 +124,65 @@ void keyboard(unsigned char key, int x, int y)
 		}
 		break;
 	case 'O':
-		if(rightBoat.gun_elev > 10)
+		if(rightBoat.gun_elev > 90)
 		{
-			printf("Right boat gun depressing\n");
+			printf("Right boat gun elevating\n");
 			rightBoat.gun_elev -= rightBoat.gun_rot_s * g.dt;
+			if(rightBoat.shellp != NULL)
+			{
+				(rightBoat.shellp)->p.x = BOAT_GUN_L * 
+								cosf((M_PI * rightBoat.gun_elev) / 180);
+								/*I HATE RADIANS*/
+				/*muzzle x co-ord*/	
+				printf("Right boat gun elev -> %f\n", (rightBoat.gun_elev));
+				printf("I don't even know %f\n", (rightBoat.shellp)->p.x);
+				(rightBoat.shellp)->p.y = BOAT_GUN_L * 
+								sinf((M_PI * rightBoat.gun_elev) / 180);
+				/*muzzle y co-ord*/
+				/*calculate initial velocities*/
+				(rightBoat.shellp)->d.x = SHELL_S * 
+										cosf((M_PI * rightBoat.gun_elev)/180);
+				(rightBoat.shellp)->d.y = SHELL_S * 
+										sinf((M_PI * rightBoat.gun_elev)/180);	
+			}
 		}
 		break;
 	case 'o':
-		if(rightBoat.gun_elev < 80)
+		if(rightBoat.gun_elev < 180)
 		{
-			printf("Right boat gun elevating\n");
+			printf("Right boat gun depressing\n");
 			rightBoat.gun_elev += rightBoat.gun_rot_s * g.dt;
+			if(rightBoat.shellp != NULL)
+			{
+				(rightBoat.shellp)->p.x = BOAT_GUN_L * 
+								cosf((M_PI * rightBoat.gun_elev) / 180);
+				/*muzzle x co-ord*/	
+				printf("Right boat gun elev -> %f\n", (rightBoat.gun_elev));
+				printf("I don't even know %f\n", (rightBoat.shellp)->p.x);
+				(rightBoat.shellp)->p.y = 
+						BOAT_GUN_L * sinf((M_PI * rightBoat.gun_elev) / 180);
+									/*+ HEIGHT_OVER_X; -- this will be replaced
+									 * with boat height calcs*/
+				/*muzzle y co-ord*/
+				/*calculate initial velocities*/
+				(rightBoat.shellp)->d.x = SHELL_S * 
+										cosf((M_PI * rightBoat.gun_elev)/180);
+				(rightBoat.shellp)->d.y = SHELL_S * 
+										sinf((M_PI * rightBoat.gun_elev)/180);	
+			}
 		}
 		break;
 	case 'Q':
 		if(leftBoat.gun_elev > 10)
 		{
-			printf("Right boat gun depressing\n");
+			printf("Left boat gun depressing\n");
 			leftBoat.gun_elev -= leftBoat.gun_rot_s * g.dt;
 		}
 		break;
 	case 'q':
 		if(leftBoat.gun_elev < 80)
 		{
-			printf("Right boat gun elevating\n");
+			printf("Left boat gun elevating\n");
 			leftBoat.gun_elev += leftBoat.gun_rot_s * g.dt;
 		}
 		break;

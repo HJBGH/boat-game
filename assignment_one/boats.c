@@ -49,25 +49,23 @@ void drawBoat(const Boat * boot, float s)
 		//glTranslatef(0,-.0625,0);
 		glBegin(GL_POLYGON);
 		glVertex2f(0, -.0625);
-		glVertex2f(.5, -.0625);
-		glVertex2f(.5, .0625);
+		glVertex2f(BOAT_GUN_L, -.0625);
+		glVertex2f(BOAT_GUN_L, .0625);
 		glVertex2f(0, .0625);
 	}
 	else
 	{
 		glTranslatef(-.5,.25,0);
-		/*180 is zero for the right boat*/
-		glRotatef(180 - (*boot).gun_elev, 0, 0, 1);
+		glRotatef((*boot).gun_elev, 0, 0, 1);
 		//glTranslatef(0,-.0625,0);
 		glBegin(GL_POLYGON);
 		glVertex2f(0, -.0625);
-		glVertex2f(.5, -.0625);
-		glVertex2f(.5, .0625);
+		glVertex2f(BOAT_GUN_L, -.0625);
+		glVertex2f(BOAT_GUN_L, .0625);
 		glVertex2f(0, .0625);
 	}			
 	glEnd();
 	glPopMatrix();
 	glPopMatrix();
 	glLoadIdentity(); //just to be safe
-}
-	
+}	
