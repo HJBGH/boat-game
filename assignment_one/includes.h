@@ -33,6 +33,7 @@
 #define MAG_DEPTH 16 /*this is an arbitrarily chosen limit on the array of
 projectile pointers, MAG being magazine*/
 #define SHELL_S .275 /*muzzle velocity of projectiles*/
+#define BOAT_SCALE .1 /*how boats are scaled*/
 
 #endif
 
@@ -41,6 +42,7 @@ extern bool wave_wire_flag;
 extern bool wave_norm_flag;
 extern bool wave_tang_flag;
 extern int segments;
+extern float k;
 /*I'll probably be able to store extern structs in here, which means it's a 
  * good place to declare Global*/
 #ifndef GLOBAL

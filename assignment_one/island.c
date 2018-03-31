@@ -26,3 +26,21 @@ void drawIsland(const Island * i)
 	glLoadIdentity();
 
 }
+
+void updateIslandShell(const Island * i)
+{
+	if(i->shellp != NULL)
+	{
+		(i->shellp)->p.x = ISLAND_GUN_L * cosf((M_PI * i->gun_elev) / 180);
+								/*I HATE RADIANS*/
+			/*muzzle x co-ord*/	
+		printf("Tasmania gun elev -> %f\n", (i->gun_elev));
+		printf("I don't even know %f\n", (i->shellp)->p.x);
+		(i->shellp)->p.y = ISLAND_GUN_L * sinf((M_PI * i->gun_elev) / 180) 
+									+ HEIGHT_OVER_X; 
+		/*muzzle y co-ord*/
+		/*calculate initial velocities*/
+		(i->shellp)->d.x = SHELL_S * cosf((M_PI * i->gun_elev)/180);
+		(i->shellp)->d.y = SHELL_S * sinf((M_PI * i->gun_elev)/180);	
+	}
+}

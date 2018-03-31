@@ -16,3 +16,6 @@ typedef struct
 extern Island tasmania; /*find better name*/
 #endif
 void drawIsland(const Island * i); /*no scaling or custom co-ordinates needed*/
+void updateIslandShell(const Island * i); 
+/*Helper function used for updating the position of a loaded shell
+ * when the island's cannon is moved*/

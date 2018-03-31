@@ -5,7 +5,6 @@
 #include "projectiles.h"
 
 #define BOAT_GUN_S 9 /*gun rotation speed*/
-#define BOAT_SCALE .1
 #define BOAT_SPEED .3 /*slow boats*/
 #define BOAT_HP 10
 #define TAS_HP 100
@@ -15,6 +14,7 @@ bool wave_wire_flag = false;
 bool wave_norm_flag = false;
 bool wave_tang_flag = false;
 int segments = 64;
+float k = (2 * M_PI) / WL;
 
 Proj2Vec2f *mag[MAG_DEPTH];
 

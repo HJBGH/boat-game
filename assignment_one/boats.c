@@ -9,7 +9,6 @@ void drawBoat(const Boat * boot, float s)
 {
 	/*use information contained in the boat struct to calculate screen
 	 * position and rotation*/
-	float k = (2 * M_PI) / WL;
 	float dy = (k * AMP) * cosf((k * (*boot).x) + ((M_PI/4.0) * g.t));
     float y = AMP * sinf((k * (*boot).x) + ((M_PI/4.0) * g.t));
 
@@ -74,13 +73,14 @@ void updateBoatShell(const Boat * boot)
 {
 	if((*boot).shellp != NULL)
 	{
+	    float y = AMP * sinf((k * (*boot).x) + ((M_PI/4.0) * g.t));
 		((*boot).shellp)->p.x = (*boot).x;/*BOAT_GUN_L * 
 							cosf((M_PI * (*boot).gun_elev) / 180);*/
 				/*muzzle x co-ord*/	
 		printf("Right boat gun elev -> %f\n", ((*boot).gun_elev));
 		printf("I don't even know %f\n", ((*boot).shellp)->p.x);
-		((*boot).shellp)->p.y = BOAT_GUN_L * 
-						sinf((M_PI * (*boot).gun_elev) / 180);
+		((*boot).shellp)->p.y = y + ((BOAT_GUN_L * 
+						sinf((M_PI * (*boot).gun_elev) / 180)) * BOAT_SCALE);
 		/*muzzle y co-ord*/
 		/*calculate initial velocities*/
 		((*boot).shellp)->d.x = SHELL_S * 
