@@ -122,25 +122,7 @@ void keyboard(unsigned char key, int x, int y)
 		{
 			printf("Right boat gun depressing\n");
 			rightBoat.gun_elev += rightBoat.gun_rot_s * g.dt;
-			if(rightBoat.shellp != NULL)
-			{
-				(rightBoat.shellp)->p.x = rightBoat.x;
-				/*BOAT_GUN_L * 
-								cosf((M_PI * rightBoat.gun_elev) / 180);*/
-				/*muzzle x co-ord*/	
-				printf("Right boat gun elev -> %f\n", (rightBoat.gun_elev));
-				printf("I don't even know %f\n", (rightBoat.shellp)->p.x);
-				(rightBoat.shellp)->p.y = 
-						BOAT_GUN_L * sinf((M_PI * rightBoat.gun_elev) / 180);
-									/*+ HEIGHT_OVER_X; -- this will be replaced
-									 * with boat height calcs*/
-				/*muzzle y co-ord*/
-				/*calculate initial velocities*/
-				(rightBoat.shellp)->d.x = SHELL_S * 
-										cosf((M_PI * rightBoat.gun_elev)/180);
-				(rightBoat.shellp)->d.y = SHELL_S * 
-										sinf((M_PI * rightBoat.gun_elev)/180);	
-			}
+			updateBoatShell(&rightBoat);
 		}
 		break;
 	case 'Q':
