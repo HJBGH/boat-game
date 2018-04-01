@@ -87,17 +87,14 @@ void updateBoatShell(const Boat * boot)
 		float guny = Y_GUN_OFFSET +
 					(sinf((boot->gun_elev * M_PI) / 180) * BOAT_GUN_L);
 		float w = atan2(guny,gunx) + atan(dy);
-
-		if(!(boot->left)) printf("right w: %f\n", w);
-		if(!(boot->left)) printf("right gunx: %f\n", gunx);
-		if(!(boot->left)) printf("right theta: %f\n", atan(dy));
-		if(!(boot->left)) printf("right p: %f\n", atan2(guny,gunx));
 		/*Use the unit circle to set new co-ordinates in the appropriate
 		 * vectors*/
 		(boot->shellp)->p.x = boot->x + (cosf(w) * BOAT_SCALE);
 		(boot->shellp)->p.y = y + (sinf(w) * BOAT_SCALE);
 		/*set the direction vector as well*/
-		(boot->shellp)->d.x = SHELL_S * cosf(w);
-		(boot->shellp)->d.y = SHELL_S * sinf(w);
+		w =  ((boot->gun_elev * M_PI) / 180) + atan(dy);
+
+		(boot->shellp)->d.x = (cosf(w) * SHELL_S);
+		(boot->shellp)->d.y = (sinf(w) * SHELL_S);
 	}
 }
