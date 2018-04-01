@@ -117,27 +117,36 @@ void idle()
 			{
 				mag[i]->loaded = true;
 				rightBoat.shellp = mag[i];
-				printf("new shell loaded into island cannon\n");
+				printf("new shell loaded into rightboat cannon\n");
 				break;
 			}
 		}
-		/*
-		(rightBoat.shellp)->p.x = (BOAT_GUN_L * 
-								cosf((M_PI * rightBoat.gun_elev) / 180)) * BOAT_SCALE;*/
-		(rightBoat.shellp)->p.x = rightBoat.x;
-								/*I HATE RADIANS*/
-		/*muzzle x co-ord*/	
-		printf("Right boat gun elev -> %f\n", (rightBoat.gun_elev));
-		printf("I don't even know %f\n", (rightBoat.shellp)->p.x);
-		(rightBoat.shellp)->p.y = BOAT_GUN_L * 
-								sinf((M_PI * rightBoat.gun_elev) / 180) 
-								* BOAT_SCALE;
-		/*muzzle y co-ord*/
-		/*calculate initial velocities*/
-		(rightBoat.shellp)->d.x = SHELL_S * cosf((M_PI * rightBoat.gun_elev)/180);
-		(rightBoat.shellp)->d.y = SHELL_S * sinf((M_PI * rightBoat.gun_elev)/180);
 	}
+	if(leftBoat.cd > 0)
+	{
+		/*this is not a robust way of doing things*/
+		leftBoat.cd -= g.dt;
+		if(leftBoat.cd < 0)
+		{
+			leftBoat.cd = 0;
+		}
+	}
+	if(leftBoat.cd == 0 && leftBoat.shellp == NULL)
+	{
+		for(int i = 0; i < MAG_DEPTH; i++)
+		{
+			if((*mag[i]).loaded == false && (*mag[i]).fired == false)
+			{
+				mag[i]->loaded = true;
+				leftBoat.shellp = mag[i];
+				printf("new shell loaded into leftboat cannon\n");
+				break;
+			}
+		}
+	}
+
 	updateBoatShell(&rightBoat);
+	updateBoatShell(&leftBoat);
 	/*Island shell never needs to be updated manually as the island never 
 	 * moves*/
 	for(int i = 0; i < MAG_DEPTH; i++)
