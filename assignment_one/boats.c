@@ -86,26 +86,25 @@ void updateBoatShell(const Boat * boot)
 		float rad_theta = atan(dy);
 		printf("theta %f\n", rad_theta);
 		/*calculate x offset, then y offset*/
-		float rad_w = atan(Y_GUN_OFFSET/X_GUN_OFFSET);
 		float x1 = BOAT_GUN_L * cosf((gun_elev * M_PI)/180);
+		float y1 = BOAT_GUN_L * sinf((gun_elev * M_PI)/180);
 		printf("gun_elev: %f\n", gun_elev);
 		printf("x1: %f\n", x1);
 		float xso = X_GUN_OFFSET + x1;
-		float yso = .1; /*= c * (cosf((M_PI/2) - (rad_theta + rad_w)) * (180/M_PI));*/
-		printf("cosine: %f\n", cosf((M_PI/2) - (rad_theta + rad_w)) * (180/M_PI));
+		float yso = Y_GUN_OFFSET + y1; /*= c * (cosf((M_PI/2) - (rad_theta + rad_w)) * (180/M_PI));*/
 	
 		if(!(boot->left))
 		{
 			xso = -1 * xso;
 		}
 		xso = BOAT_SCALE * xso;
-		/*yso *= BOAT_SCALE * BOAT_SCALE;*/
+		yso *= BOAT_SCALE;
 	
 		/*calculate shell x*/
 		((*boot).shellp)->p.x = (*boot).x + xso; /*( BOAT_GUN_L 
 					* (cosf((M_PI * (*boot).gun_elev) / 180) + theta) *
 					BOAT_SCALE);*/
-		((*boot).shellp)->p.y = y;
+		((*boot).shellp)->p.y = y + yso;
 		
 		printf("xso: %f, yso: %f\n", xso, yso);
 		printf("x: %f, y: %f\n", ((*boot).shellp)->p.x,((*boot).shellp)->p.y);
