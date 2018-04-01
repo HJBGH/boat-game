@@ -81,33 +81,36 @@ void updateBoatShell(const Boat * boot)
 		{
 			gun_elev = 180-gun_elev;
 		}
+		
 	    float y = AMP * sinf((k * (*boot).x) + ((M_PI/4.0) * g.t));
 		float dy = (k * AMP) * cosf((k * (*boot).x) + ((M_PI/4.0) * g.t));
 		float theta = atan(dy);
 		/*calculate x offset, then y offset, with respect to the boat*/
+		/*
 		float x1 = BOAT_GUN_L * cosf((gun_elev * M_PI)/180);
 		float y1 = BOAT_GUN_L * sinf((gun_elev * M_PI)/180);
 		printf("gun_elev: %f\n", gun_elev);
 		printf("x1: %f\n", x1);
 		float xso = X_GUN_OFFSET + x1;
-		float yso = Y_GUN_OFFSET + y1;
+		float yso = Y_GUN_OFFSET + y1;*/
 		/*calculate final global x/y position*/
-		float w = atan(yso/xso) + theta;
+		//float w = atan(yso/xso) + theta;
+		float w = ((boot->gun_elev * M_PI) / 180) + theta;
 		printf("theta %f\n", theta);
-		printf("w %f\n", w);
+		printf("w degrees %f\n", w * (180/M_PI));
 	
 		/*calculate shell x*/
 		if(!(boot->left))
 		{
-			(boot->shellp)->p.x =  (*boot).x + (-1 *(cosf(w) * BOAT_SCALE));
+			(boot->shellp)->p.x =  (*boot).x + (cosf(w) * BOAT_SCALE);
+			(boot->shellp)->p.y = y + ((sinf(w) * BOAT_SCALE));
 		}
 		else
 		{
 			((*boot).shellp)->p.x = (*boot).x + (cosf(w) * BOAT_SCALE);
+			((*boot).shellp)->p.y = y + (sinf(w) * BOAT_SCALE);
 		}
-		((*boot).shellp)->p.y = y + (sinf(w) * BOAT_SCALE);
 		
-		printf("xso: %f, yso: %f\n", xso, yso);
 		printf("x: %f, y: %f\n", ((*boot).shellp)->p.x,((*boot).shellp)->p.y);
 
 		/*calculate initial velocities*/
