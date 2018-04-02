@@ -16,6 +16,7 @@ typedef struct
     float s; /*s for SPEED, gotta go FAST*/
 	float gun_rot_s; /*gun rotation speed*/
 	float cd; /*cooldown*/
+	float def_cd; /*missile defence cd*/
 	Proj2Vec2f * shellp;
 } Boat;
 

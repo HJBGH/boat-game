@@ -152,7 +152,19 @@ void keyboard(unsigned char key, int x, int y)
 			leftBoat.gun_elev += leftBoat.gun_rot_s * g.dt;
 		}
 		break;
-
+	case 'e':
+		if(leftBoat.shellp != NULL && leftBoat.cd <= 0)
+		{
+			leftBoat.cd = 1;/* 1000 millisecond (1 second) cooldown*/
+			(leftBoat.shellp)->fired = true; 
+			(leftBoat.shellp)->loaded = false;
+			/*setting fired to true causes the shell to start to change
+			 * position, setting loaded to false means other cannons
+			 * can use it once it's added back to the pool*/
+			leftBoat.shellp = NULL;
+			/*this shell isn't associated with the cooldown*/
+		}	
+		break;
     default:
         break;
     }

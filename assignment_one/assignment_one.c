@@ -17,6 +17,8 @@ int segments = 64;
 float k = (2 * M_PI) / WL;
 
 Proj2Vec2f *mag[MAG_DEPTH];
+Proj2Vec2f *def_mag[MAG_DEPTH];/*this second array of projectile pointers 
+are used for modeling the flight of the defensive pellets*/
 
 Global g;
 
@@ -67,10 +69,18 @@ void idle()
 			tasmania.cd = 0;
 		}
 	}	
+	if(tasmania.def_cd > 0)
+	{
+		tasmania.def_cd -= g.dt;
+		if(tasmania.def_cd < 0)
+		{
+			tasmania.cd = 0;
+		}
+	}
 	if(tasmania.cd == 0 && tasmania.shellp == NULL)
 	{
 		/* find a free projectile */
-		/*this is somewhat precarious, if no free projectile
+		/* this is somewhat precarious, if no free projectile
 		 * can be found there'll be problems.
 		 * I'm also not 100 percent sure that I should be handling cooldown
 		 * behaviour in here
@@ -85,12 +95,11 @@ void idle()
 				break;
 			}
 		}
+		/*I can redo all of this using the unit circle*/
 		(tasmania.shellp)->p.x = ISLAND_GUN_L * 
 								cosf((M_PI * tasmania.gun_elev) / 180);
 								/*I HATE RADIANS*/
 		/*muzzle x co-ord*/	
-		printf("Tasmania gun elev -> %f\n", (tasmania.gun_elev));
-		printf("I don't even know %f\n", (tasmania.shellp)->p.x);
 		(tasmania.shellp)->p.y = 
 						ISLAND_GUN_L * sinf((M_PI * tasmania.gun_elev) / 180) 
 									+ HEIGHT_OVER_X; 
@@ -100,6 +109,7 @@ void idle()
 		(tasmania.shellp)->d.y = SHELL_S * sinf((M_PI * tasmania.gun_elev)/180);
 	}
 	/*reload boat shells*/
+	/*TODO: refactor all of this in to a boatCDhelper func*/
 	if(rightBoat.cd > 0)
 	{
 		/*this is not a robust way of doing things*/
@@ -153,6 +163,7 @@ void idle()
 	{
 		if(mag[i]->fired == true)
 		{
+			/*also need to do hit detection in here*/
 			updateProj(mag[i]);
 		}
 	}
@@ -308,6 +319,11 @@ void init()
 		printf("Projectile memory allocated\n");
 		(*mag[i]).fired = false;
 		(*mag[i]).loaded = false;
+		def_mag[i] = (Proj2Vec2f*) malloc(sizeof(Proj2Vec2f*));
+		printf("Defensive projectile memory allocated\n");
+		(*def_mag[i]).fired = false;
+		(*def_mag[i]).loaded = false;
+
 	}
 	/*Need to write over the already in memory*/
     glMatrixMode(GL_PROJECTION);

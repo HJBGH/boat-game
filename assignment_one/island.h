@@ -8,6 +8,7 @@ typedef struct
 	float gun_elev;	
 	float gun_rot_s;/*gun rotation speed*/
 	float cd; /*cooldown*/
+	float def_cd; /*missile defence cooldown*/
 	Proj2Vec2f * shellp;
 } Island;
 
