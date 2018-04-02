@@ -96,17 +96,17 @@ void idle()
 			}
 		}
 		/*I can redo all of this using the unit circle*/
-		(tasmania.shellp)->p.x = ISLAND_GUN_L * 
-								cosf((M_PI * tasmania.gun_elev) / 180);
+		//(tasmania.shellp)->p.x = ISLAND_GUN_L * 
+		//						cosf((M_PI * tasmania.gun_elev) / 180);
 								/*I HATE RADIANS*/
 		/*muzzle x co-ord*/	
-		(tasmania.shellp)->p.y = 
-						ISLAND_GUN_L * sinf((M_PI * tasmania.gun_elev) / 180) 
-									+ HEIGHT_OVER_X; 
+		//(tasmania.shellp)->p.y = 
+		//				ISLAND_GUN_L * sinf((M_PI * tasmania.gun_elev) / 180) 
+		//							+ HEIGHT_OVER_X; 
 		/*muzzle y co-ord*/
 		/*calculate initial velocities*/
-		(tasmania.shellp)->d.x = SHELL_S * cosf((M_PI * tasmania.gun_elev)/180);
-		(tasmania.shellp)->d.y = SHELL_S * sinf((M_PI * tasmania.gun_elev)/180);
+		//(tasmania.shellp)->d.x = SHELL_S * cosf((M_PI * tasmania.gun_elev)/180);
+		//(tasmania.shellp)->d.y = SHELL_S * sinf((M_PI * tasmania.gun_elev)/180);
 	}
 	/*reload boat shells*/
 	/*TODO: refactor all of this in to a boatCDhelper func*/
@@ -157,6 +157,7 @@ void idle()
 
 	updateBoatShell(&rightBoat);
 	updateBoatShell(&leftBoat);
+	updateIslandShell(&tasmania);
 	/*Island shell never needs to be updated manually as the island never 
 	 * moves*/
 	for(int i = 0; i < MAG_DEPTH; i++)
@@ -165,6 +166,7 @@ void idle()
 		{
 			/*also need to do hit detection in here*/
 			updateProj(mag[i]);
+			detectIslandHit(mag[i]);
 		}
 	}
     glutPostRedisplay();
