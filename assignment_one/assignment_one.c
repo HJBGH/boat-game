@@ -135,10 +135,25 @@ void idle()
 		{
 			/*also need to do hit detection in here*/
 			updateProj(mag[i]);
-			detectIslandHit(mag[i]);
-			detectBoatHit(&rightBoat, mag[i]);
-			detectBoatHit(&leftBoat, mag[i]);
-			/*O(N^2), absolute garbage fire, this would not scale*/
+			if(detectIslandHit(mag[i]))
+			{
+				tasmania.hp--;
+				mag[i]->fired = false;
+				mag[i]->loaded = false;
+			}
+			if(detectBoatHit(&rightBoat, mag[i]))
+			{
+				rightBoat.hp--;
+				mag[i]->fired = false;
+				mag[i]->loaded = false;
+			}
+			if(detectBoatHit(&leftBoat, mag[i]))
+			{
+				leftBoat.hp--;
+				mag[i]->fired = false;
+				mag[i]->loaded = false;
+			}
+			/*O(N^2), absolute garbage fire, this isn't good*/
 			for(int k = 0; k < MAG_DEPTH; k++)
 			{
 				if(def_mag[k]->proj.fired == true)
@@ -461,15 +476,15 @@ void drawOSD()
 	glBegin(GL_QUADS);
 	glVertex3f(0,0,0);
 	glVertex3f(0,.03,0);
-	glVertex3f(rightBoat.hp*.03, .03, 0);
-	glVertex3f(rightBoat.hp*.03, 0, 0);
+	glVertex3f(leftBoat.hp*.03, .03, 0);
+	glVertex3f(leftBoat.hp*.03, 0, 0);
 	glEnd();
 	glColor3f(0,0,1);
 	glBegin(GL_QUADS);
 	glVertex3f(0,0,0);
 	glVertex3f(0,-.03,0);
-	glVertex3f(leftBoat.hp*.03, -.03, 0);
-	glVertex3f(leftBoat.hp*.03, 0, 0);
+	glVertex3f(rightBoat.hp*.03, -.03, 0);
+	glVertex3f(rightBoat.hp*.03, 0, 0);
 	glColor3f(1,1,0);
 	glEnd();
 	glBegin(GL_QUADS);
