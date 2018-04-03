@@ -32,7 +32,7 @@ void drawProj(const Proj2Vec2f * shell);
 void drawDefProj(const Def_proj * dp);
 void updateProj(Proj2Vec2f * shell);
 void updateDefProj(Def_proj * dp);
-void detectIntercept(const Def_proj * dp, const Proj2Vec2f * shell);
+bool detectIntercept(const Def_proj * dp, const Proj2Vec2f * shell);
 
 extern Proj2Vec2f *mag[MAG_DEPTH];/*MAG_DEPTH is define in includes.h*/
 

@@ -109,6 +109,20 @@ void keyboard(unsigned char key, int x, int y)
 			/*this shell isn't associated with the cooldown*/
 		}
 		break;
+	case 'b':
+		if(tasmania.def_cd <= 0 && tasmania.dp != NULL)
+		{
+			printf("island defensive shell fired\n");
+			tasmania.def_cd = 1;/* 1000 millisecond (1 second) cooldown*/
+			(tasmania.dp)->proj.fired = true; 
+			(tasmania.dp)->proj.loaded = false;
+			/*setting fired to true causes the shell to start to change
+			 * position, setting loaded to false means other cannons
+			 * can use it once it's added back to the pool*/
+			tasmania.dp = NULL;
+			/*this shell isn't associated with the cooldown*/
+		}
+		break;
 	case 'O':
 		if(rightBoat.gun_elev > 90)
 		{

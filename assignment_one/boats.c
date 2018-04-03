@@ -2,7 +2,7 @@
 #include "boats.h"
 #define X_GUN_OFFSET .5
 #define Y_GUN_OFFSET .25
-#define HIT_RADIUS .15
+#define HIT_RADIUS .09 /*otherwise the projectile hits its own boat*/
 /*TODO: Consider declaring structs to store the vertices of the boats
  * */
 void drawBoat(const Boat * boot, float s)

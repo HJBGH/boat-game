@@ -42,6 +42,18 @@ void updateIslandShell(const Island * i)
 		(i->shellp)->d.x = SHELL_S * cosf((M_PI * i->gun_elev)/180);
 		(i->shellp)->d.y = SHELL_S * sinf((M_PI * i->gun_elev)/180);	
 	}
+	if(i->dp != NULL)
+	{
+		(i->dp)->proj.p.x = ISLAND_GUN_L * cosf((M_PI * i->gun_elev) / 180);
+								/*I HATE RADIANS*/
+			/*muzzle x co-ord*/	
+		(i->dp)->proj.p.y = ISLAND_GUN_L * sinf((M_PI * i->gun_elev) / 180) 
+									+ HEIGHT_OVER_X; 
+		/*muzzle y co-ord*/
+		/*calculate initial velocities*/
+		(i->dp)->proj.d.x = SHELL_S * cosf((M_PI * i->gun_elev)/180);
+		(i->dp)->proj.d.y = SHELL_S * sinf((M_PI * i->gun_elev)/180);	
+	}
 }
 
 /*The actions to take if the island is hit are managed in assignment_one.c*/

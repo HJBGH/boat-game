@@ -23,6 +23,9 @@ are used for modeling the flight of the defensive pellets*/
 //is less than the y value of the sine function at it's x co-ord, recycle it.
 Global g;
 
+/*prototype for a helper function, it's at the very end of the file*/
+void boatCDhelper(Boat * boot);
+
 Island tasmania = 
 {
 	.hp = TAS_HP,
@@ -75,7 +78,7 @@ void idle()
 		tasmania.def_cd -= g.dt;
 		if(tasmania.def_cd < 0)
 		{
-			tasmania.cd = 0;
+			tasmania.def_cd = 0;
 		}
 	}
 	if(tasmania.cd == 0 && tasmania.shellp == NULL)
@@ -97,84 +100,8 @@ void idle()
 			}
 		}
 	}
-	/*reload boat shells*/
-	/*TODO: refactor all of this in to a boatCDhelper func*/
-	if(rightBoat.cd > 0)
-	{
-		/*this is not a robust way of doing things*/
-		rightBoat.cd -= g.dt;
-		if(rightBoat.cd < 0)
-		{
-			rightBoat.cd = 0;
-		}
-	}	
-	if(rightBoat.def_cd > 0)
-	{
-		/*this is not a robust way of doing things*/
-		rightBoat.def_cd -= g.dt;
-		if(rightBoat.def_cd < 0)
-		{
-			rightBoat.def_cd = 0;
-		}
-	}
-	if(rightBoat.cd == 0 && rightBoat.shellp == NULL)
-	{
-		for(int i = 0; i < MAG_DEPTH; i++)
-		{
-			if((*mag[i]).loaded == false && (*mag[i]).fired == false)
-			{
-				mag[i]->loaded = true;
-				rightBoat.shellp = mag[i];
-				printf("new shell loaded into rightboat cannon\n");
-				break;
-			}
-		}
-	}
-	if(rightBoat.def_cd == 0 && rightBoat.dp == NULL)
-	{
-		for(int i = 0; i < MAG_DEPTH; i++)
-		{
-			if(def_mag[i]->proj.loaded == false && def_mag[i]->proj.fired == false)
-			{
-				def_mag[i]->proj.loaded = true;
-				rightBoat.dp = def_mag[i];
-				rightBoat.dp->r = .01;
-				printf("new defensive shell loaded into rightboat cannon\n");
-				break;
-			}
-		}
-	}
-	if(leftBoat.cd > 0)
-	{
-		/*this is not a robust way of doing things*/
-		leftBoat.cd -= g.dt;
-		if(leftBoat.cd < 0)
-		{
-			leftBoat.cd = 0;
-		}
-	}
-	if(leftBoat.def_cd > 0)
-	{
-		leftBoat.def_cd -= g.dt;
-		if(leftBoat.cd < 0)
-		{
-			leftBoat.cd = 0;
-		}
-	}
-	if(leftBoat.cd == 0 && leftBoat.shellp == NULL)
-	{
-		for(int i = 0; i < MAG_DEPTH; i++)
-		{
-			if((*mag[i]).loaded == false && (*mag[i]).fired == false)
-			{
-				mag[i]->loaded = true;
-				leftBoat.shellp = mag[i];
-				printf("new shell loaded into leftboat cannon\n");
-				break;
-			}
-		}
-	}
-	if(leftBoat.dp == NULL && leftBoat.def_cd <= 0)
+	/*identical behaviour to the above statement, except for defensives*/
+	if(tasmania.def_cd == 0 && tasmania.dp == NULL)
 	{
 		for(int i = 0; i < MAG_DEPTH; i++)
 		{
@@ -182,18 +109,23 @@ void idle()
 			&& def_mag[i]->proj.fired == false)
 			{
 				def_mag[i]->proj.loaded = true;
-				leftBoat.dp = def_mag[i];
-				leftBoat.dp->r = .01;
-				printf("new defense shell loaded into leftboat cannon\n");
+				tasmania.dp = def_mag[i];
+				tasmania.dp->r = .01;
+				printf("new shell loaded into island cannon\n");
 				break;
 			}
 		}
 	}
+	/*reload boat shells*/
+	boatCDhelper(&rightBoat);
+	boatCDhelper(&leftBoat);
+	/* these update methods are contained in their respective 
+	 * files, they essentially allow the shell to be moved with the
+	 * movement of the boat's gun as it bobs on the waves*/
 	updateBoatShell(&rightBoat);
 	updateBoatShell(&leftBoat);
 	updateIslandShell(&tasmania);
-	/*Island shell never needs to be updated manually as the island never 
-	 * moves*/
+	
 	for(int i = 0; i < MAG_DEPTH; i++)
 	{
 		if(mag[i]->fired == true)
@@ -203,6 +135,19 @@ void idle()
 			detectIslandHit(mag[i]);
 			detectBoatHit(&rightBoat, mag[i]);
 			detectBoatHit(&leftBoat, mag[i]);
+			/*O(N^2), absolute garbage fire, this would not scale*/
+			for(int k = 0; k < MAG_DEPTH; k++)
+			{
+				if(def_mag[k]->proj.fired == true)
+				{
+					if(detectIntercept(def_mag[k], mag[i]))
+					{
+						/*the shell has been intercepted, recycle it*/
+						mag[i]->fired = false;
+						mag[i]->loaded = false;
+					}
+				}
+			}
 		}
 		if(def_mag[i]->proj.fired == true)
 		{
@@ -393,4 +338,53 @@ int main(int argc, char **argv)
     glutMainLoop();
 
     return EXIT_SUCCESS;
+}
+
+void boatCDhelper(Boat * boot)
+{
+	if(boot->cd > 0)
+	{
+		/*this is not a robust way of doing things*/
+		boot->cd -= g.dt;
+		if(boot->cd < 0)
+		{
+			boot->cd = 0;
+		}
+	}
+	if(boot->def_cd > 0)
+	{
+		boot->def_cd -= g.dt;
+		if(boot->cd < 0)
+		{
+			boot->cd = 0;
+		}
+	}
+	if(boot->cd == 0 && boot->shellp == NULL)
+	{
+		for(int i = 0; i < MAG_DEPTH; i++)
+		{
+			if((*mag[i]).loaded == false && (*mag[i]).fired == false)
+			{
+				mag[i]->loaded = true;
+				boot->shellp = mag[i];
+				printf("new shell loaded into leftboat cannon\n");
+				break;
+			}
+		}
+	}
+	if(boot->dp == NULL && boot->def_cd <= 0)
+	{
+		for(int i = 0; i < MAG_DEPTH; i++)
+		{
+			if(def_mag[i]->proj.loaded == false 
+			&& def_mag[i]->proj.fired == false)
+			{
+				def_mag[i]->proj.loaded = true;
+				boot->dp = def_mag[i];
+				boot->dp->r = .01;
+				printf("new defense shell loaded into leftboat cannon\n");
+				break;
+			}
+		}
+	}
 }

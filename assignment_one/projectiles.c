@@ -85,3 +85,31 @@ void updateDefProj(Def_proj * dp)
 	}
 	updateProj(&(dp->proj));
 }
+
+bool detectIntercept(const Def_proj * dp, const Proj2Vec2f * shell)
+{
+	if((dp->proj.p.x < 0 && shell->p.x > 0) || 
+	(dp->proj.p.x > 0 && shell->p.x < 0))
+	{
+		return false;
+	}
+	if((dp->proj.p.y < 0 && shell->p.y > 0) || 
+	(dp->proj.p.y > 0 && shell->p.y < 0))
+	{
+		return false;
+	}
+	/*calculate the hypotenuse of the triangle formed by the shell, the centre
+	  of the boat ( it's x,y co-ords) and a third point that is the intersection
+	  of the shell x axis and the boat y axis.*/
+	float cx = (fabs(dp->proj.p.x) - fabs(shell->p.x));
+	float cy = (fabs(dp->proj.p.y) - fabs(shell->p.y));
+	float c = sqrt((cx * cx) + (cy *cy));
+	//printf("c: %f\n", c);
+	if(c < dp->r)
+	{
+		printf("intercept detected\n");
+		return true;
+	}
+	return false;
+
+}

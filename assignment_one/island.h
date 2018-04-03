@@ -10,6 +10,7 @@ typedef struct
 	float cd; /*cooldown*/
 	float def_cd; /*missile defence cooldown*/
 	Proj2Vec2f * shellp;
+	Def_proj * dp;
 } Island;
 
 #define ISLAND_GUN_L .15 /*island gun length*/
