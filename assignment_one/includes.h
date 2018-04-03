@@ -52,6 +52,7 @@ typedef struct {
 	int frames;
   	float frameRate, frameRateI;
   	float lastFrameRateT;
+	bool game_over;
 } Global;
 extern Global g;
 #endif

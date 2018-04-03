@@ -23,12 +23,14 @@ are used for modeling the flight of the defensive pellets*/
 //is less than the y value of the sine function at it's x co-ord, recycle it.
 Global g =
 {
-	.frameRateI = 1
+	.frameRateI = 1,
+	.game_over = false
 };
 
 /*prototype for a helper function, it's at the very end of the file*/
 void boatCDhelper(Boat * boot);
 void drawOSD();
+
 Island tasmania = 
 {
 	.hp = TAS_HP,
@@ -59,6 +61,9 @@ Boat rightBoat =
 	.gun_rot_s = BOAT_GUN_S
 };
 
+
+/* I wasn't sure where exactly to put game logic, so it's mostly 
+ * in the idle loop*/
 void idle()
 {
 	/*
@@ -103,7 +108,7 @@ void idle()
 			}
 		}
 	}
-	/*identical behaviour to the above statement, except for defensives*/
+	/*identical behaviour to the above statement, except for Def_projs*/
 	if(tasmania.def_cd == 0 && tasmania.dp == NULL)
 	{
 		for(int i = 0; i < MAG_DEPTH; i++)
@@ -173,6 +178,10 @@ void idle()
 		}
 	}
 
+	if(rightBoat.hp <=0 || leftBoat.hp <=0 || tasmania.hp <= 0)
+	{
+		g.game_over = true;
+	}
 	/*Finally; update framerate tracking information*/
 	float fdt = g.t - g.lastFrameRateT;
   	if (fdt > g.frameRateI) 
@@ -285,12 +294,19 @@ void drawOcean()
 
 void display()
 {
-    int err;
+	int err;
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     /*Do game over testing before we draw anything*/
+	if(g.game_over)
+	{
+		drawOSD();
+	    glutSwapBuffers();
+		return;
+	}
+
 	drawAxes(1.0);
 	drawIsland(&tasmania);
 	drawBoat(&leftBoat, BOAT_SCALE);
@@ -300,11 +316,11 @@ void display()
 	/*draw trajectories, draw projectiles, draw defense loop through mags*/
 	for(int i = 0; i < MAG_DEPTH; i++)
 	{
-		if((*mag[i]).loaded == true ||(*mag[i]).fired == true)
+		if(mag[i]->loaded == true ||mag[i]->fired == true)
 		{
 			drawTraj((mag[i]));
 		}
-		if((*mag[i]).fired == true)
+		if(mag[i]->fired == true)
 		{
 			drawProj((mag[i]));
 		}
@@ -439,6 +455,30 @@ void drawOSD()
   	glMatrixMode(GL_MODELVIEW);
   	glPushMatrix();
   	glLoadIdentity();
+
+	/*Game over, only occurs if a ship or the island dies*/
+	if(g.game_over)
+	{
+		glColor3f(1.0, .5, 0);
+		glRasterPos2i(200, 250);
+	  	snprintf(char_buf, sizeof char_buf, "GAME OVER");
+  		for (bufp = char_buf; *bufp; bufp++)
+		{
+   		 	glutBitmapCharacter(GLUT_BITMAP_9_BY_15, *bufp);
+		}
+		/* Pop modelview */
+  		glPopMatrix();  
+  		glMatrixMode(GL_PROJECTION);
+
+  		/* Pop projection */
+  		glPopMatrix();  
+  		glMatrixMode(GL_MODELVIEW);
+
+  		/* Pop attributes */
+  		glPopAttrib();
+		return;
+	}
+	
 
   	/* Frame rate */
   	glColor3f(1.0, 1.0, 0.0);

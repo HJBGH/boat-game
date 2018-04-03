@@ -4,6 +4,11 @@
  * keyboard input from this file*/
 void keyboard(unsigned char key, int x, int y)
 {
+	if(g.game_over)
+	{
+		if(key == 27) exit(EXIT_SUCCESS);
+		return;
+	}
     switch (key)
     {
     case 27:/*27 is esc*/	
