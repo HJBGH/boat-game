@@ -17,9 +17,10 @@ int segments = 64;
 float k = (2 * M_PI) / WL;
 
 Proj2Vec2f *mag[MAG_DEPTH];
-Proj2Vec2f *def_mag[MAG_DEPTH];/*this second array of projectile pointers 
+Def_proj *def_mag[MAG_DEPTH];/*this second array of projectile pointers 
 are used for modeling the flight of the defensive pellets*/
-
+//TODO: introduce projectile/wave hit detection, I.E. if a projectiles y co-ord
+//is less than the y value of the sine function at it's x co-ord, recycle it.
 Global g;
 
 Island tasmania = 
@@ -95,18 +96,6 @@ void idle()
 				break;
 			}
 		}
-		/*I can redo all of this using the unit circle*/
-		//(tasmania.shellp)->p.x = ISLAND_GUN_L * 
-		//						cosf((M_PI * tasmania.gun_elev) / 180);
-								/*I HATE RADIANS*/
-		/*muzzle x co-ord*/	
-		//(tasmania.shellp)->p.y = 
-		//				ISLAND_GUN_L * sinf((M_PI * tasmania.gun_elev) / 180) 
-		//							+ HEIGHT_OVER_X; 
-		/*muzzle y co-ord*/
-		/*calculate initial velocities*/
-		//(tasmania.shellp)->d.x = SHELL_S * cosf((M_PI * tasmania.gun_elev)/180);
-		//(tasmania.shellp)->d.y = SHELL_S * sinf((M_PI * tasmania.gun_elev)/180);
 	}
 	/*reload boat shells*/
 	/*TODO: refactor all of this in to a boatCDhelper func*/
@@ -119,6 +108,15 @@ void idle()
 			rightBoat.cd = 0;
 		}
 	}	
+	if(rightBoat.def_cd > 0)
+	{
+		/*this is not a robust way of doing things*/
+		rightBoat.def_cd -= g.dt;
+		if(rightBoat.def_cd < 0)
+		{
+			rightBoat.def_cd = 0;
+		}
+	}
 	if(rightBoat.cd == 0 && rightBoat.shellp == NULL)
 	{
 		for(int i = 0; i < MAG_DEPTH; i++)
@@ -132,10 +130,32 @@ void idle()
 			}
 		}
 	}
+	if(rightBoat.def_cd == 0 && rightBoat.dp == NULL)
+	{
+		for(int i = 0; i < MAG_DEPTH; i++)
+		{
+			if(def_mag[i]->proj.loaded == false && def_mag[i]->proj.fired == false)
+			{
+				def_mag[i]->proj.loaded = true;
+				rightBoat.dp = def_mag[i];
+				rightBoat.dp->r = .01;
+				printf("new defensive shell loaded into rightboat cannon\n");
+				break;
+			}
+		}
+	}
 	if(leftBoat.cd > 0)
 	{
 		/*this is not a robust way of doing things*/
 		leftBoat.cd -= g.dt;
+		if(leftBoat.cd < 0)
+		{
+			leftBoat.cd = 0;
+		}
+	}
+	if(leftBoat.def_cd > 0)
+	{
+		leftBoat.def_cd -= g.dt;
 		if(leftBoat.cd < 0)
 		{
 			leftBoat.cd = 0;
@@ -154,7 +174,21 @@ void idle()
 			}
 		}
 	}
-
+	if(leftBoat.dp == NULL && leftBoat.def_cd <= 0)
+	{
+		for(int i = 0; i < MAG_DEPTH; i++)
+		{
+			if(def_mag[i]->proj.loaded == false 
+			&& def_mag[i]->proj.fired == false)
+			{
+				def_mag[i]->proj.loaded = true;
+				leftBoat.dp = def_mag[i];
+				leftBoat.dp->r = .01;
+				printf("new defense shell loaded into leftboat cannon\n");
+				break;
+			}
+		}
+	}
 	updateBoatShell(&rightBoat);
 	updateBoatShell(&leftBoat);
 	updateIslandShell(&tasmania);
@@ -169,6 +203,10 @@ void idle()
 			detectIslandHit(mag[i]);
 			detectBoatHit(&rightBoat, mag[i]);
 			detectBoatHit(&leftBoat, mag[i]);
+		}
+		if(def_mag[i]->proj.fired == true)
+		{
+			updateDefProj(def_mag[i]);
 		}
 	}
     glutPostRedisplay();
@@ -297,6 +335,10 @@ void display()
 		{
 			drawProj((mag[i]));
 		}
+		if(def_mag[i]->proj.fired == true)
+		{
+			drawDefProj(def_mag[i]);
+		}
 	}
 
 	/*iterate through mag, draw each shell and their trajectory 
@@ -315,19 +357,20 @@ void init()
     /* In this program these OpenGL calls only need to be done once,
       but normally they would go elsewhere, e.g. display */
 
-	/*malloc projectile array in here*/
+	/*malloc projectile array in here, these actually never get cleaned up
+	 * properly because GLUT doesn't allow one to exit the main loop afaik*/
 	int i;
 	for(i = 0; i < MAG_DEPTH; i++)
 	{
-		mag[i] = (Proj2Vec2f*) malloc(sizeof(Proj2Vec2f*));
+		mag[i] = (Proj2Vec2f*) malloc(sizeof(Proj2Vec2f));
 		printf("Projectile memory allocated\n");
 		(*mag[i]).fired = false;
 		(*mag[i]).loaded = false;
-		def_mag[i] = (Proj2Vec2f*) malloc(sizeof(Proj2Vec2f*));
+		def_mag[i] = (Def_proj*) malloc(sizeof(Def_proj));
 		printf("Defensive projectile memory allocated\n");
-		(*def_mag[i]).fired = false;
-		(*def_mag[i]).loaded = false;
-
+		def_mag[i]->proj.fired = false;
+		def_mag[i]->proj.loaded = false;
+		def_mag[i]->r = .01;
 	}
 	/*Need to write over the already in memory*/
     glMatrixMode(GL_PROJECTION);

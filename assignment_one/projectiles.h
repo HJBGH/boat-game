@@ -18,9 +18,21 @@ typedef struct
 	 * acceleration is handled externally*/
 } Proj2Vec2f; /*a projectile made of 2x vec2f structs*/
 
+/*The struct below is essentially a wrapper struct used to track an 
+ * the expanding radius to model the cloud of pellets being used as missle
+ * defense by the boats*/
+typedef struct
+{
+	Proj2Vec2f proj;
+	float r;
+} Def_proj;
+
 void drawTraj(const Proj2Vec2f * shell);
 void drawProj(const Proj2Vec2f * shell);
+void drawDefProj(const Def_proj * dp);
 void updateProj(Proj2Vec2f * shell);
+void updateDefProj(Def_proj * dp);
+void detectIntercept(const Def_proj * dp, const Proj2Vec2f * shell);
 
 extern Proj2Vec2f *mag[MAG_DEPTH];/*MAG_DEPTH is define in includes.h*/
 

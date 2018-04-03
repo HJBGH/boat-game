@@ -69,24 +69,23 @@ void drawBoat(const Boat * boot, float s)
 	glLoadIdentity(); //just to be safe
 }	
 
-/*TODO: refactor so that I'm not using '->' and '(*boot).' interchangebly*/
-/*ALSO: add some better comments*/
+/*The defense projectile also gets updated in here*/
 void updateBoatShell(const Boat * boot)
-{
-	if(boot->shellp != NULL)
-	{
-		/*Calculate useful information*/
-	    float y = AMP * sinf((k * boot->x) + ((M_PI/4.0) * g.t));
-		float dy = (k * AMP) * cosf((k * boot->x) + ((M_PI/4.0) * g.t)); 
-
+{	    
+	float y = AMP * sinf((k * boot->x) + ((M_PI/4.0) * g.t));
+	float dy = (k * AMP) * cosf((k * boot->x) + ((M_PI/4.0) * g.t)); 
 		/*I have to find the angle at the centre of the boat, with the sides 
 		 * being X_GUN_OFFSET + (cos(gun_elev) * BOAT_GUN_L) and Y_GUN_OFFSET
 		 * + (sin(gun_elev) * BOAT_GUN_L)*/
-		float go = boot->left ? X_GUN_OFFSET : -X_GUN_OFFSET;
-		float gunx = go + (cosf((boot->gun_elev * M_PI) / 180) * BOAT_GUN_L);
-		float guny = Y_GUN_OFFSET +
-					(sinf((boot->gun_elev * M_PI) / 180) * BOAT_GUN_L);
-		float w = atan2(guny,gunx) + atan(dy);
+	float go = boot->left ? X_GUN_OFFSET : -X_GUN_OFFSET;
+	float gunx = go + (cosf((boot->gun_elev * M_PI) / 180) * BOAT_GUN_L);
+	float guny = Y_GUN_OFFSET +
+				(sinf((boot->gun_elev * M_PI) / 180) * BOAT_GUN_L);
+	float w = atan2(guny,gunx) + atan(dy);
+	
+	if(boot->shellp != NULL)
+	{
+		/*Calculate useful information*/
 		/*Use the unit circle to set new co-ordinates in the appropriate
 		 * vectors*/
 		(boot->shellp)->p.x = boot->x + (cosf(w) * BOAT_SCALE);
@@ -97,9 +96,18 @@ void updateBoatShell(const Boat * boot)
 		(boot->shellp)->d.x = (cosf(w) * SHELL_S);
 		(boot->shellp)->d.y = (sinf(w) * SHELL_S);
 	}
+	if(boot->dp != NULL)
+	{
+		(boot->dp)->proj.p.x = boot->x + (cosf(w) * BOAT_SCALE);
+		(boot->dp)->proj.p.y = y + (sinf(w) * BOAT_SCALE);
+		/*set the direction vector as well*/
+		w =  ((boot->gun_elev * M_PI) / 180) + atan(dy);
+
+		(boot->dp)->proj.d.x = (cosf(w) * SHELL_S);
+		(boot->dp)->proj.d.y = (sinf(w) * SHELL_S);
+	}	
 }
 
-//TODO: test this method to find 
 bool detectBoatHit(const Boat * boot, const Proj2Vec2f * shell)
 {
 	/*I can take some measures to avoid calculation in here based on the position

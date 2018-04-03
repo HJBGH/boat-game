@@ -6,7 +6,7 @@ void keyboard(unsigned char key, int x, int y)
 {
     switch (key)
     {
-    case 27:/*I take it 27 is esc*/
+    case 27:/*27 is esc*/	
         exit(EXIT_SUCCESS); 
 		break;
 	case ' ':
@@ -138,6 +138,16 @@ void keyboard(unsigned char key, int x, int y)
 			/*this shell isn't associated with the cooldown*/
 		}	
 		break;
+	case '8':
+		if(rightBoat.dp != NULL && rightBoat.def_cd <= 0)
+		{
+			printf("firing rightboat defense\n");
+			rightBoat.def_cd = 1;
+			(rightBoat.dp)->proj.fired = true;
+			(rightBoat.dp)->proj.loaded = false;
+			rightBoat.dp = NULL;
+		}
+		break;
 	case 'Q':
 		if(leftBoat.gun_elev > 10)
 		{
@@ -164,6 +174,16 @@ void keyboard(unsigned char key, int x, int y)
 			leftBoat.shellp = NULL;
 			/*this shell isn't associated with the cooldown*/
 		}	
+		break;
+	case '3':
+		if(leftBoat.dp != NULL && leftBoat.def_cd <=0)
+		{
+			printf("firing leftboat defense\n");
+			leftBoat.def_cd = 1;
+			(leftBoat.dp)->proj.fired = true;
+			(leftBoat.dp)->proj.loaded = false;
+			leftBoat.dp = NULL;
+		}
 		break;
     default:
         break;

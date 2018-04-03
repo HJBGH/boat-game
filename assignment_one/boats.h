@@ -20,6 +20,7 @@ typedef struct
 	float cd; /*cooldown*/
 	float def_cd; /*missile defence cd*/
 	Proj2Vec2f * shellp;
+	Def_proj * dp;
 } Boat;
 
 extern Boat leftBoat;
