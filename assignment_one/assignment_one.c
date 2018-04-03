@@ -167,6 +167,8 @@ void idle()
 			/*also need to do hit detection in here*/
 			updateProj(mag[i]);
 			detectIslandHit(mag[i]);
+			detectBoatHit(&rightBoat, mag[i]);
+			detectBoatHit(&leftBoat, mag[i]);
 		}
 	}
     glutPostRedisplay();

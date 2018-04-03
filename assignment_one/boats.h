@@ -10,7 +10,9 @@ typedef struct
 {
 	bool left;/*used drawBoat function*/
 	int hp;
-	float x; /*y gets calculated later, it doesn't have to be stored*/
+	float x; /*y gets calculated later, I've re-thought this,
+				y gets used so frequently that it might be worth
+				storing it somewhere*/
 	float gun_elev; /*gun elevation in degrees*/
 	float colors[3];
     float s; /*s for SPEED, gotta go FAST*/
@@ -27,4 +29,7 @@ void drawBoat(const Boat * boot, float s);
 void updateBoatShell(const Boat * boot); 
 /*used to recalculate shell position while it's loaded in a boat and the boat
  * is moving around*/
+bool detectBoatHit(const Boat * boot, const Proj2Vec2f * shell);
+/* managing the consequences of a hit is performed in assignment_one.c, in
+ * the update function*/
 #endif
