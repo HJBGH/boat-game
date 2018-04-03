@@ -21,11 +21,14 @@ Def_proj *def_mag[MAG_DEPTH];/*this second array of projectile pointers
 are used for modeling the flight of the defensive pellets*/
 //TODO: introduce projectile/wave hit detection, I.E. if a projectiles y co-ord
 //is less than the y value of the sine function at it's x co-ord, recycle it.
-Global g;
+Global g =
+{
+	.frameRateI = 1
+};
 
 /*prototype for a helper function, it's at the very end of the file*/
 void boatCDhelper(Boat * boot);
-
+void drawOSD();
 Island tasmania = 
 {
 	.hp = TAS_HP,
@@ -154,6 +157,15 @@ void idle()
 			updateDefProj(def_mag[i]);
 		}
 	}
+
+	/*Finally; update framerate tracking information*/
+	float fdt = g.t - g.lastFrameRateT;
+  	if (fdt > g.frameRateI) 
+	{
+    	g.frameRate = g.frames / fdt;
+    	g.lastFrameRateT = g.t;
+    	g.frames = 0;
+  	}
     glutPostRedisplay();
 }
 /*draw a vector with it's origin at x,y to <a,b> scaled by s and normalized
@@ -269,7 +281,8 @@ void display()
 	drawBoat(&leftBoat, BOAT_SCALE);
 	drawBoat(&rightBoat, BOAT_SCALE);
     drawOcean();
-	/*draw trajectories, draw projectiles, loop through mag*/
+	drawOSD();
+	/*draw trajectories, draw projectiles, draw defense loop through mags*/
 	for(int i = 0; i < MAG_DEPTH; i++)
 	{
 		if((*mag[i]).loaded == true ||(*mag[i]).fired == true)
@@ -286,14 +299,11 @@ void display()
 		}
 	}
 
-	/*iterate through mag, draw each shell and their trajectory 
-	 * if they're available*/
-
     if((err = glGetError()))
     {
         printf("%s: %x\n", (gluErrorString(err)), err);
     }
-    
+   	g.frames++;
     glutSwapBuffers();
 }
 
@@ -326,7 +336,7 @@ void init()
 int main(int argc, char **argv)
 {
     glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
+    glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH );
 	glutInitWindowSize(500, 500);
     glutCreateWindow("Island defence 2D");
 
@@ -344,7 +354,7 @@ void boatCDhelper(Boat * boot)
 {
 	if(boot->cd > 0)
 	{
-		/*this is not a robust way of doing things*/
+		/*this is not a robust way of doing this*/
 		boot->cd -= g.dt;
 		if(boot->cd < 0)
 		{
@@ -387,4 +397,89 @@ void boatCDhelper(Boat * boot)
 			}
 		}
 	}
+}
+
+/*I'll be honest, this code is pretty much the same as the 
+ * OSD from tute 3 with the exception of the health bars*/
+void drawOSD()
+{
+	char char_buf[30];
+  	char * bufp;
+  	int w, h;
+    
+  	glPushAttrib(GL_ENABLE_BIT | GL_CURRENT_BIT);
+  	glDisable(GL_DEPTH_TEST);
+  	glDisable(GL_LIGHTING);
+
+  	glMatrixMode(GL_PROJECTION);
+  	glPushMatrix();
+  	glLoadIdentity();
+
+  	/* Set up orthographic coordinate system to match the 
+     window, i.e. (0,0)-(w,h) */
+  	w = glutGet(GLUT_WINDOW_WIDTH);
+  	h = glutGet(GLUT_WINDOW_HEIGHT);
+  	glOrtho(0.0, w, 0.0, h, -1.0, 1.0);
+
+  	glMatrixMode(GL_MODELVIEW);
+  	glPushMatrix();
+  	glLoadIdentity();
+
+  	/* Frame rate */
+  	glColor3f(1.0, 1.0, 0.0);
+  	glRasterPos2i(350, 485);
+  	snprintf(char_buf, sizeof char_buf, "fr (f/s): %6.0f", g.frameRate);
+  	for (bufp = char_buf; *bufp; bufp++)
+	{
+    	glutBitmapCharacter(GLUT_BITMAP_9_BY_15, *bufp);
+	}
+
+  	/* Time per frame */
+  	glColor3f(1.0, 1.0, 0.0);
+  	glRasterPos2i(350, 470);
+  	snprintf(char_buf, sizeof char_buf, "ft (ms/f): %5.0f", 
+												1.0 / g.frameRate * 1000.0);
+  	for (bufp = char_buf; *bufp; bufp++)
+	{
+    	glutBitmapCharacter(GLUT_BITMAP_9_BY_15, *bufp);
+	}
+
+  	/* Pop modelview */
+  	glPopMatrix();  
+  	glMatrixMode(GL_PROJECTION);
+
+  	/* Pop projection */
+  	glPopMatrix();  
+  	glMatrixMode(GL_MODELVIEW);
+
+  	/* Pop attributes */
+  	glPopAttrib();
+	/*hard coded health bar drawing, drawn as quad strips*/
+	glPushMatrix();
+	glTranslatef(-.9, .9, 0);
+	glColor3f(1,0,0);
+	glBegin(GL_QUADS);
+	glVertex3f(0,0,0);
+	glVertex3f(0,.03,0);
+	glVertex3f(rightBoat.hp*.03, .03, 0);
+	glVertex3f(rightBoat.hp*.03, 0, 0);
+	glEnd();
+	glColor3f(0,0,1);
+	glBegin(GL_QUADS);
+	glVertex3f(0,0,0);
+	glVertex3f(0,-.03,0);
+	glVertex3f(leftBoat.hp*.03, -.03, 0);
+	glVertex3f(leftBoat.hp*.03, 0, 0);
+	glColor3f(1,1,0);
+	glEnd();
+	glBegin(GL_QUADS);
+	glVertex3f(0,-.03,0);
+	glVertex3f(0,-.06,0);
+	glVertex3f(tasmania.hp*.003, -.06, 0);
+	glVertex3f(tasmania.hp*.003, -.03, 0);
+	glEnd();
+
+	glPopMatrix();
+
+	return;
 }

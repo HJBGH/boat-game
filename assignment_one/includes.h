@@ -47,7 +47,12 @@ extern float k;
  * good place to declare Global*/
 #ifndef GLOBAL
 #define GLOBAL
-typedef struct {float t, lastT, dt;} Global;
+typedef struct {
+	float t, lastT, dt;
+	int frames;
+  	float frameRate, frameRateI;
+  	float lastFrameRateT;
+} Global;
 extern Global g;
 #endif
 
