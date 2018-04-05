@@ -1,7 +1,6 @@
 #include "projectiles.h"
 
-#define SEGMENTS 32
-#define T 8.0 /*T being the number of seconds we wish to project into*/
+#define DT .01 /*Time delta used for trajectory prediction. in seconds*/
 #define EXPANSION_RATE .2 /*Rate of expansion per second of defense radius*/
 #define MAX_R .15 /*used to limit the lifespan of the defense projectile*/
 
@@ -10,22 +9,25 @@ void drawTraj(const Proj2Vec2f * shell)
 	/*because this code shouldn't modify any actual attributes 
 	 * of the shell argument, we copy all the relevant data into local
 	 * variables and work from them. Expensive space wise, but safe*/
-	float y = (*shell).p.y;
-	float x = (*shell).p.x;
-	float dy = (*shell).d.y;
-	float dx = (*shell).d.x;
+	float y = shell->p.y;
+	float x = shell->p.x;
+	float dy = shell->d.y;
+	float dx = shell->d.x;
+	float wave_y = AMP * sinf((k * x) + ((M_PI/4.0) * g.t));
 
 	/*euler numerical integration*/
 	glBegin(GL_LINE_STRIP);
     glColor3f(1,1,1);
 
-	for(float i = 0; i < T; i += T/SEGMENTS)
-	{
+    while(y > wave_y && (x > L_MAX && x < R_MAX))
+    {
 		glVertex3f(x, y, 0);
-		y += dy * (T/SEGMENTS);
-		x += dx * (T/SEGMENTS);
-		dy += GRAV * (T/SEGMENTS);
-	}
+		y += dy * DT;
+		x += dx * DT;
+		dy += GRAV * DT;
+        wave_y = AMP * sinf((k * x) + ((M_PI/4.0) * g.t));
+
+    }
 	glEnd();
 }
 

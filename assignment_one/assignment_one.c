@@ -350,8 +350,8 @@ void init()
 	{
 		mag[i] = (Proj2Vec2f*) malloc(sizeof(Proj2Vec2f));
 		printf("Projectile memory allocated\n");
-		(*mag[i]).fired = false;
-		(*mag[i]).loaded = false;
+		mag[i]->fired = false;
+		mag[i]->loaded = false;
 		def_mag[i] = (Def_proj*) malloc(sizeof(Def_proj));
 		printf("Defensive projectile memory allocated\n");
 		def_mag[i]->proj.fired = false;
