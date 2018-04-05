@@ -46,6 +46,7 @@ projectile pointers, MAG being magazine*/
 extern bool wave_wire_flag;
 extern bool wave_norm_flag;
 extern bool wave_tang_flag;
+extern bool update_time_flag;
 extern int segments;
 extern float k;
 /*I'll probably be able to store extern structs in here, which means it's a 
@@ -53,7 +54,10 @@ extern float k;
 #ifndef GLOBAL
 #define GLOBAL
 typedef struct {
-	float t, lastT, dt;
+	float t, lastT, dt, wt; 
+    /* wt (wave time), this var is will have the value if t when 
+     * update_time_flag is set to true. it's used to implement wave animation
+     * pausing*/
 	int frames;
   	float frameRate, frameRateI;
   	float lastFrameRateT;

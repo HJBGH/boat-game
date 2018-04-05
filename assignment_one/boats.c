@@ -9,8 +9,8 @@ void drawBoat(const Boat * boot, float s)
 {
 	/*use information contained in the boat struct to calculate screen
 	 * position and rotation*/
-	float dy = (k * AMP) * cosf((k * (*boot).x) + ((M_PI/4.0) * g.t));
-    float y = AMP * sinf((k * (*boot).x) + ((M_PI/4.0) * g.t));
+	float dy = (k * AMP) * cosf((k * (*boot).x) + ((M_PI/4.0) * g.wt));
+    float y = AMP * sinf((k * (*boot).x) + ((M_PI/4.0) * g.wt));
 
 	glPushMatrix();
 	glLoadIdentity();
@@ -107,8 +107,8 @@ void updateBoat(Boat * boot)
 /*The defense projectile also gets updated in here*/
 void updateBoatShell(const Boat * boot)
 {	    
-	float y = AMP * sinf((k * boot->x) + ((M_PI/4.0) * g.t));
-	float dy = (k * AMP) * cosf((k * boot->x) + ((M_PI/4.0) * g.t)); 
+	float y = AMP * sinf((k * boot->x) + ((M_PI/4.0) * g.wt));
+	float dy = (k * AMP) * cosf((k * boot->x) + ((M_PI/4.0) * g.wt)); 
 		/*I have to find the angle at the centre of the boat, with the sides 
 		 * being X_GUN_OFFSET + (cos(gun_elev) * BOAT_GUN_L) and Y_GUN_OFFSET
 		 * + (sin(gun_elev) * BOAT_GUN_L)*/
@@ -149,7 +149,7 @@ bool detectBoatHit(const Boat * boot, const Proj2Vec2f * shell)
 	 * of the shell. for example, if the shell has a negative x co-ord and 
 	 * the boat a positive one, we can return false without doing any further
 	 * computing*/	    
-	float y = AMP * sinf((k * boot->x) + ((M_PI/4.0) * g.t));
+	float y = AMP * sinf((k * boot->x) + ((M_PI/4.0) * g.wt));
 	if((boot->x < 0 && (shell->p).x > 0) || (boot->x > 0 && (shell->p).x < 0))
 	{
 		return false;

@@ -29,7 +29,6 @@ void keyUp(unsigned char key, int x, int y)
 		leftBoat.gun_rot_s = 0;
 		break;
     default:
-        printf("pbt");
         break;
     }
 }
@@ -65,6 +64,9 @@ void keyboard(unsigned char key, int x, int y)
 	case 'p':
 		wave_wire_flag = false;
 		break;
+    case '\'':
+        update_time_flag = !(update_time_flag);
+        break;
 	case '+':
 		if(segments < MAX_T)
 		{	

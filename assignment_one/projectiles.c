@@ -13,7 +13,7 @@ void drawTraj(const Proj2Vec2f * shell)
 	float x = shell->p.x;
 	float dy = shell->d.y;
 	float dx = shell->d.x;
-	float wave_y = AMP * sinf((k * x) + ((M_PI/4.0) * g.t));
+	float wave_y = AMP * sinf((k * x) + ((M_PI/4.0) * g.wt));
 
 	/*euler numerical integration*/
 	glBegin(GL_LINE_STRIP);
@@ -25,7 +25,7 @@ void drawTraj(const Proj2Vec2f * shell)
 		y += dy * DT;
 		x += dx * DT;
 		dy += GRAV * DT;
-        wave_y = AMP * sinf((k * x) + ((M_PI/4.0) * g.t));
+        wave_y = AMP * sinf((k * x) + ((M_PI/4.0) * g.wt));
 
     }
 	glEnd();
@@ -50,7 +50,7 @@ void updateProj(Proj2Vec2f * shell)
 	shell->p.y += (*shell).d.y * g.dt;
 	shell->p.x += (*shell).d.x * g.dt;
 	shell->d.y += GRAV * g.dt;
-	float y = AMP * sinf((k * shell->p.x) + ((M_PI/4.0) * g.t));
+	float y = AMP * sinf((k * shell->p.x) + ((M_PI/4.0) * g.wt));
 
 	/*we're never going to see it again if it goes past these
 	 * bounds so reset all the variables and make it eligible for use again*/

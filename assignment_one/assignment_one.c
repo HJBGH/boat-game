@@ -11,6 +11,7 @@
 bool wave_wire_flag = false;
 bool wave_norm_flag = false;
 bool wave_tang_flag = false;
+bool update_time_flag = true;
 int segments = 64;
 float k = (2 * M_PI) / WL;
 
@@ -32,7 +33,7 @@ void drawOSD();
 Island tasmania = 
 {
 	.hp = TAS_HP,
-	.gun_elev = 0,
+	.gun_elev = 90,/*start at 90, most fair*/
 	.gun_rot_s = 0
 };
 
@@ -68,6 +69,7 @@ void idle()
 	 * I should be updating cooldowns in here*/
     g.lastT = g.t;
     g.t = glutGet(GLUT_ELAPSED_TIME) / 1000.0;
+    if(update_time_flag) g.wt = g.t;
     g.dt = g.t - g.lastT; 
     //printf("idle function called\n");
 	if(tasmania.cd > 0)
@@ -252,9 +254,9 @@ void drawOcean()
         for(int i = 0; i <= segments; i++)
         {
             x = (i * stepSize) + L_MAX;
-            y = AMP * sinf((k * x) + ((M_PI/4.0) * g.t));
+            y = AMP * sinf((k * x) + ((M_PI/4.0) * g.wt));
             /*printf("%f <- x\n", x);*/
-            dy = (k * AMP) * cosf((k * x) + ((M_PI/4.0) * g.t));
+            dy = (k * AMP) * cosf((k * x) + ((M_PI/4.0) * g.wt));
 
             //printf("%f <- dy\n\n", dy);
 			if(wave_tang_flag)
@@ -281,7 +283,7 @@ void drawOcean()
     for(int i = 0; i <= segments; i++)
     {
         x = (i * stepSize) + L_MAX;
-        y = AMP * sinf((k * x) + ((M_PI/4.0) * g.t));
+        y = AMP * sinf((k * x) + ((M_PI/4.0) * g.wt));
         /*printf("%f <- x\n", x);
         printf("%f <- y\n\n", y);*/
         glVertex3f(x, y, 1.0);
