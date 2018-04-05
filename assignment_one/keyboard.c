@@ -147,19 +147,11 @@ void keyboard(unsigned char key, int x, int y)
 		break;
 	case 'O':
 		if(rightBoat.gun_elev > 90)
-		{
-			printf("Right boat gun elevating\n");
-			rightBoat.gun_elev -= rightBoat.gun_rot_s * g.dt;
-			updateBoatShell(&rightBoat);
-		}
+			rightBoat.gun_rot_s = GUN_S;
 		break;
 	case 'o':
 		if(rightBoat.gun_elev < 180)
-		{
-			printf("Right boat gun depressing\n");
-			rightBoat.gun_elev += rightBoat.gun_rot_s * g.dt;
-			updateBoatShell(&rightBoat);
-		}
+			rightBoat.gun_rot_s = GUN_S;
 		break;
 	case 'i':
 		if(rightBoat.shellp != NULL && rightBoat.cd <= 0)
@@ -186,17 +178,11 @@ void keyboard(unsigned char key, int x, int y)
 		break;
 	case 'Q':
 		if(leftBoat.gun_elev > 10)
-		{
-			printf("Left boat gun depressing\n");
-			leftBoat.gun_elev -= leftBoat.gun_rot_s * g.dt;
-		}
+			leftBoat.gun_rot_s = GUN_S;
 		break;
 	case 'q':
 		if(leftBoat.gun_elev < 80)
-		{
-			printf("Left boat gun elevating\n");
-			leftBoat.gun_elev += leftBoat.gun_rot_s * g.dt;
-		}
+			leftBoat.gun_rot_s = GUN_S;
 		break;
 	case 'e':
 		if(leftBoat.shellp != NULL && leftBoat.cd <= 0)

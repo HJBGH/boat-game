@@ -69,9 +69,25 @@ void drawBoat(const Boat * boot, float s)
 	glLoadIdentity(); //just to be safe
 }	
 
+/*This is very tightly bound to the left/right member variable, it isn't
+ * really a good solution*/
 void updateBoat(Boat * boot)
 {
-    boot->x += boot->s * g.dt;
+    if(boot->s < 0)
+    {
+        if(boot->left && boot->x > L_MAX)
+            boot->x += boot->s * g.dt;
+        else if(!(boot->left) && boot->x > CENTER)
+            boot->x += boot->s * g.dt;
+    }
+    else if(boot->s > 0)
+    {
+        if(boot->left && boot->x < CENTER)
+            boot->x += boot->s * g.dt;
+        else if(!(boot->left) && boot->x < R_MAX)
+            boot->x += boot->s * g.dt;
+    }
+    /*also need to update gun elevation in here*/
 }
 
 /*The defense projectile also gets updated in here*/

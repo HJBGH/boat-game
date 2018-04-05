@@ -36,7 +36,8 @@ projectile pointers, MAG being magazine*/
 #define BOAT_SCALE .1 /*how boats are scaled*/
 #define GUN_S 30 /*gun rotation speed*/
 #define BOAT_SPEED .3 /*slow boats*/
-
+#define MAX_I_ELEV 180
+#define MIN_I_ELEV 10
 
 #endif
 
