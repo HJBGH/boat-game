@@ -19,14 +19,15 @@ typedef struct
 	float gun_rot_s; /*gun rotation speed*/
 	float cd; /*cooldown*/
 	float def_cd; /*missile defence cd*/
-	Proj2Vec2f * shellp;
-	Def_proj * dp;
+	Proj2Vec2f * shellp; /*currently loaded cannon shell*/
+	Def_proj * dp; /*currently loaded defense shell*/
 } Boat;
 
 extern Boat leftBoat;
 extern Boat rightBoat;
 
 void drawBoat(const Boat * boot, float s);
+void updateBoat(Boat * boot);
 void updateBoatShell(const Boat * boot); 
 /*used to recalculate shell position while it's loaded in a boat and the boat
  * is moving around*/

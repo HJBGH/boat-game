@@ -2,6 +2,31 @@
 #include "keyboard.h"
 /*There will need to be interactions with extern vars in order to handle 
  * keyboard input from this file*/
+
+void keyUp(unsigned char key, int x, int y)
+{
+    switch(key)
+    {
+    case 'a':
+    case 'd':
+        leftBoat.s = 0;
+        break;
+    case 'l':
+    case 'j':
+        rightBoat.s = 0;
+        break;
+	/*cannon controls*/
+	case 'f':
+	case 'h':
+		tasmania.gun_rot_s = 0;
+		break;	
+    default:
+        printf("pbt");
+        break;
+    }
+}
+   
+
 void keyboard(unsigned char key, int x, int y)
 {
 	if(g.game_over)
@@ -52,39 +77,31 @@ void keyboard(unsigned char key, int x, int y)
     case 'a':
         printf("moving left boat left\n");
         /*I'm not sure it's a good idea to calculate boat movement in
-         * here*/
+         * here, it isn't*/
         if(leftBoat.x >  L_MAX)
-            leftBoat.x-=leftBoat.s*g.dt;
+            leftBoat.s = -BOAT_SPEED;
         break;
     case 'd':
         printf("moving left boat right\n");
         if(leftBoat.x <= CENTER)
-            leftBoat.x+=leftBoat.s*g.dt;
+            leftBoat.s = BOAT_SPEED;
         break;
     case 'l':
         printf("moving right boat right\n");
         if(rightBoat.x < R_MAX)
-		{
-            rightBoat.x+=rightBoat.s*g.dt;
-			updateBoatShell(&rightBoat);
-		}
-		printf("right boat x %f\n", rightBoat.x);
+            rightBoat.s = BOAT_SPEED;
         break;
     case 'j':
         printf("moving right boat left\n");
         if(rightBoat.x >= CENTER)
-		{
-            rightBoat.x-=rightBoat.s*g.dt;
-			updateBoatShell(&rightBoat);	
-		}
-		printf("right boat x %f\n", rightBoat.x);
+            rightBoat.s = -BOAT_SPEED;
         break;
 	/*cannon controls*/
 	case 'f':
 		if(tasmania.gun_elev < 170)
 		{
 			printf("Island gun rotating left\n");
-			tasmania.gun_elev += tasmania.gun_rot_s * g.dt;
+			tasmania.gun_rot_s = GUN_S;
 			printf("%f - island gun elevation\n", tasmania.gun_elev);
 			updateIslandShell(&tasmania);
 		}
@@ -93,7 +110,7 @@ void keyboard(unsigned char key, int x, int y)
 		if(tasmania.gun_elev > 10)
 		{
 			printf("Island gun rotating right\n");
-			tasmania.gun_elev -= tasmania.gun_rot_s * g.dt;
+			tasmania.gun_rot_s = -GUN_S;
 			printf("%f - island gun elevation\n", tasmania.gun_elev);
 			updateIslandShell(&tasmania);
 		}

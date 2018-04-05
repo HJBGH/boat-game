@@ -4,8 +4,6 @@
 #include "island.h"
 #include "projectiles.h"
 
-#define BOAT_GUN_S 9 /*gun rotation speed*/
-#define BOAT_SPEED .3 /*slow boats*/
 #define BOAT_HP 10
 #define TAS_HP 100
 
@@ -34,8 +32,8 @@ void drawOSD();
 Island tasmania = 
 {
 	.hp = TAS_HP,
-	.gun_elev = 30,
-	.gun_rot_s = 16
+	.gun_elev = 0,
+	.gun_rot_s = 0
 };
 
 Boat leftBoat = 
@@ -45,8 +43,8 @@ Boat leftBoat =
 	.x = -.5,
 	.gun_elev = 30,
 	.colors = {1, 0, 0},
-    .s = BOAT_SPEED,
-	.gun_rot_s = BOAT_GUN_S
+    .s = 0,
+	.gun_rot_s = 0
 };
 
 
@@ -57,8 +55,8 @@ Boat rightBoat =
 	.x = .5,
 	.gun_elev = 150,
 	.colors = {0, 0, 1},
-    .s = BOAT_SPEED,
-	.gun_rot_s = BOAT_GUN_S
+    .s = 0,
+	.gun_rot_s = 0
 };
 
 
@@ -127,6 +125,10 @@ void idle()
 	/*reload boat shells*/
 	boatCDhelper(&rightBoat);
 	boatCDhelper(&leftBoat);
+    /* these update methods are contained in their respective files, they
+     * allow for position / rotation updates independent of g.dt*/
+    updateBoat(&rightBoat);
+    updateBoat(&leftBoat);
 	/* these update methods are contained in their respective 
 	 * files, they essentially allow the shell to be moved with the
 	 * movement of the boat's gun as it bobs on the waves*/
@@ -376,6 +378,7 @@ int main(int argc, char **argv)
     glutIdleFunc(idle);
     glutDisplayFunc(display);
     glutKeyboardFunc(keyboard);
+    glutKeyboardUpFunc(keyUp);
     glutMainLoop();
 
     return EXIT_SUCCESS;

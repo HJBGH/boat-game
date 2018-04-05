@@ -3,3 +3,4 @@
 interact with boats*/
 #include "island.h"
 void keyboard(unsigned char, int, int);
+void keyUp(unsigned char, int, int);

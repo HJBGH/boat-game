@@ -69,6 +69,11 @@ void drawBoat(const Boat * boot, float s)
 	glLoadIdentity(); //just to be safe
 }	
 
+void updateBoat(Boat * boot)
+{
+    boot->x += boot->s * g.dt;
+}
+
 /*The defense projectile also gets updated in here*/
 void updateBoatShell(const Boat * boot)
 {	    

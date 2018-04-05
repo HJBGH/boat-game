@@ -34,6 +34,9 @@
 projectile pointers, MAG being magazine*/
 #define SHELL_S .275 /*muzzle velocity of projectiles*/
 #define BOAT_SCALE .1 /*how boats are scaled*/
+#define GUN_S 30 /*gun rotation speed*/
+#define BOAT_SPEED .3 /*slow boats*/
+
 
 #endif
 
