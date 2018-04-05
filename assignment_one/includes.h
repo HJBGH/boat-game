@@ -31,26 +31,24 @@
 #define MAX_T 256
 #define MIN_T 4
 #define MAG_DEPTH 16 /*this is an arbitrarily chosen limit on the array of
-projectile pointers, MAG being magazine*/
+projectile pointers, MAG meaning magazine*/
 #define SHELL_S .275 /*muzzle velocity of projectiles*/
 #define BOAT_SCALE .1 /*how boats are scaled*/
 #define GUN_S 30 /*gun rotation speed*/
 #define BOAT_SPEED .3 /*slow boats*/
+/*gun elevation limits*/
 #define MAX_I_ELEV 180
 #define MAX_B_ELEV 90
 #define MIN_ELEV 0
 
 #endif
 
-//maybe move these externs
 extern bool wave_wire_flag;
 extern bool wave_norm_flag;
 extern bool wave_tang_flag;
 extern bool update_time_flag;
 extern int segments;
 extern float k;
-/*I'll probably be able to store extern structs in here, which means it's a 
- * good place to declare Global*/
 #ifndef GLOBAL
 #define GLOBAL
 typedef struct {
@@ -58,12 +56,14 @@ typedef struct {
     /* wt (wave time), this var is will have the value if t when 
      * update_time_flag is set to true. it's used to implement wave animation
      * pausing*/
+    /*framerate measurement variables*/
 	int frames;
   	float frameRate, frameRateI;
   	float lastFrameRateT;
+    /*game_over man*/
 	bool game_over;
 } Global;
 extern Global g;
 #endif
 
-void drawAxes(float l);
+void drawAxes(float l);/*this gets used in drawboats() in boats.c*/

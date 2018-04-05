@@ -18,8 +18,6 @@ float k = (2 * M_PI) / WL;
 Proj2Vec2f *mag[MAG_DEPTH];
 Def_proj *def_mag[MAG_DEPTH];/*this second array of projectile pointers 
 are used for modeling the flight of the defensive pellets*/
-//TODO: introduce projectile/wave hit detection, I.E. if a projectiles y co-ord
-//is less than the y value of the sine function at it's x co-ord, recycle it.
 Global g =
 {
 	.frameRateI = 1,
@@ -65,13 +63,13 @@ Boat rightBoat =
  * in the idle loop*/
 void idle()
 {
-	/*
-	 * I should be updating cooldowns in here*/
+    /*Timing updates*/
     g.lastT = g.t;
     g.t = glutGet(GLUT_ELAPSED_TIME) / 1000.0;
     if(update_time_flag) g.wt = g.t;
     g.dt = g.t - g.lastT; 
-    //printf("idle function called\n");
+
+    /*cooldown management for the island*/
 	if(tasmania.cd > 0)
 	{
 		/*this is not a robust way of doing things*/
@@ -93,13 +91,10 @@ void idle()
 	{
 		/* find a free projectile */
 		/* this is somewhat precarious, if no free projectile
-		 * can be found there'll be problems.
-		 * I'm also not 100 percent sure that I should be handling cooldown
-		 * behaviour in here
-		 * */
+		 * can be found there'll be problems.*/
 		for(int i = 0; i < MAG_DEPTH; i++)
 		{
-			if((*mag[i]).loaded == false && (*mag[i]).fired == false)
+			if(mag[i]->loaded == false && mag[i]->fired == false)
 			{
 				mag[i]->loaded = true;
 				tasmania.shellp = mag[i];
@@ -118,7 +113,7 @@ void idle()
 			{
 				def_mag[i]->proj.loaded = true;
 				tasmania.dp = def_mag[i];
-				tasmania.dp->r = .01;
+				tasmania.dp->r = .01;/*set initial radius*/
 				printf("new shell loaded into island cannon\n");
 				break;
 			}
@@ -197,6 +192,7 @@ void idle()
   	}
     glutPostRedisplay();
 }
+
 /*draw a vector with it's origin at x,y to <a,b> scaled by s and normalized
  * if n is true. Color this vector according to cr, cg, and cb*/
 void drawVector(float x, float y, float a, float b, float s, bool n, float cr, float cg, float cb)
@@ -238,11 +234,9 @@ void drawAxes(float l)
 /*should this take arguments? who knows.*/
 void drawOcean() 
 {
-	/*variable declaration*/
 	float k = (2 * M_PI) / WL; /*effectively PI, open to change*/
     float x = 0; 
     float y = 0;
-	//perhaps make stepsize global, we're going to need it for drawing boats
     float stepSize = (R_MAX - L_MAX)/segments;
 
 	/*unfortunately we have to use two loops for this, otherwise
@@ -318,7 +312,7 @@ void display()
 	drawBoat(&rightBoat, BOAT_SCALE);
     drawOcean();
 	drawOSD();
-	/*draw trajectories, draw projectiles, draw defense loop through mags*/
+	/*draw trajectories, draw projectiles, draw defense, loop through mags*/
 	for(int i = 0; i < MAG_DEPTH; i++)
 	{
 		if(mag[i]->loaded == true ||mag[i]->fired == true)
@@ -345,11 +339,9 @@ void display()
 
 void init()
 {
-    /* In this program these OpenGL calls only need to be done once,
-      but normally they would go elsewhere, e.g. display */
-
 	/*malloc projectile array in here, these actually never get cleaned up
-	 * properly because GLUT doesn't allow one to exit the main loop afaik*/
+	 * properly because GLUT doesn't allow one to exit the main loop afaik and
+     * I'm weary of doing calls to free() in idle or something*/
 	int i;
 	for(i = 0; i < MAG_DEPTH; i++)
 	{
@@ -363,7 +355,9 @@ void init()
 		def_mag[i]->proj.loaded = false;
 		def_mag[i]->r = .01;
 	}
-	/*Need to write over the already in memory*/
+
+    /* In this program these OpenGL calls only need to be done once,
+      but normally they would go elsewhere, e.g. display */
     glMatrixMode(GL_PROJECTION);
     glOrtho(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0);
     glMatrixMode(GL_MODELVIEW);
@@ -387,6 +381,8 @@ int main(int argc, char **argv)
     return EXIT_SUCCESS;
 }
 
+/*the function below is a consequence of a badly thought out implementation
+ * of the cannons*/
 void boatCDhelper(Boat * boot)
 {
 	if(boot->cd > 0)
@@ -515,7 +511,7 @@ void drawOSD()
 
   	/* Pop attributes */
   	glPopAttrib();
-	/*hard coded health bar drawing, drawn as quad strips*/
+	/*hard coded health bar drawing, drawn as quads*/
 	glPushMatrix();
 	glTranslatef(-.9, .9, 0);
 	glColor3f(1,0,0);

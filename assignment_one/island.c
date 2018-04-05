@@ -12,7 +12,6 @@ void drawIsland(const Island * i)
 	glEnd();
 	//Do transforms then draw cannon
 	glPushMatrix();
-	//glLoadIdentity();	
 	glTranslatef(0,HEIGHT_OVER_X,0);
 	glRotatef(i->gun_elev, 0, 0, 1);
 	glBegin(GL_QUAD_STRIP);
@@ -34,7 +33,6 @@ void updateIsland(Island * i)
         i->gun_elev += i->gun_rot_s * g.dt;
 }
 
-/* I can rework this using the unit circle*/
 void updateIslandShell(const Island * i)
 {
 	if(i->shellp != NULL)
@@ -53,7 +51,7 @@ void updateIslandShell(const Island * i)
 	{
 		(i->dp)->proj.p.x = ISLAND_GUN_L * cosf((M_PI * i->gun_elev) / 180);
 								/*I HATE RADIANS*/
-			/*muzzle x co-ord*/	
+		/*muzzle x co-ord*/	
 		(i->dp)->proj.p.y = ISLAND_GUN_L * sinf((M_PI * i->gun_elev) / 180) 
 									+ HEIGHT_OVER_X; 
 		/*muzzle y co-ord*/
@@ -66,6 +64,7 @@ void updateIslandShell(const Island * i)
 /*The actions to take if the island is hit are managed in assignment_one.c*/
 bool detectIslandHit(const Proj2Vec2f * shell)
 {
+    /*basic static bounding box style collision*/
 	if((shell->p.x > -ISLAND_X && shell->p.x < ISLAND_X) &&
 		(shell->p.y > OCEAN_FLOOR && shell-> p.y < HEIGHT_OVER_X))
 		{

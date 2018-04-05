@@ -19,6 +19,7 @@ void drawTraj(const Proj2Vec2f * shell)
 	glBegin(GL_LINE_STRIP);
     glColor3f(1,1,1);
 
+    /*wave_y used to determine when the shell falls into the ocean*/
     while(y > wave_y && (x > L_MAX && x < R_MAX))
     {
 		glVertex3f(x, y, 0);
@@ -26,7 +27,6 @@ void drawTraj(const Proj2Vec2f * shell)
 		x += dx * DT;
 		dy += GRAV * DT;
         wave_y = AMP * sinf((k * x) + ((M_PI/4.0) * g.wt));
-
     }
 	glEnd();
 }
@@ -36,16 +36,13 @@ void drawProj(const Proj2Vec2f * shell)
 	glPointSize(5.0);
 	glBegin(GL_POINTS);
 	glColor3f(1,1,1);
-	glVertex2f((*shell).p.x, (*shell).p.y);
+	glVertex2f(shell->p.x, shell->p.y);
 	glEnd();
 }
 
-/*only function allowed to change shell, this is irrelevant considering
- * how much I change them in assignment_one.c*/
 /*This only gets used while the projectile is in flight*/
 void updateProj(Proj2Vec2f * shell)
 {
-	//printf("Updating the projectile at address %p\n", shell);
 	/*perform numerical integration on projectiles*/
 	shell->p.y += (*shell).d.y * g.dt;
 	shell->p.x += (*shell).d.x * g.dt;
@@ -67,6 +64,7 @@ void updateProj(Proj2Vec2f * shell)
 
 void drawDefProj(const Def_proj * dp)
 {
+    /*This draws a circle, it should've been named as such*/
 	glBegin(GL_LINE_STRIP);
 	glColor3f(1.0,1.0,1.0);
 	for(float i = 0; i < 2*M_PI; i += .01)

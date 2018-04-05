@@ -1,6 +1,5 @@
 #include "includes.h"
 #include "projectiles.h"
-/*Rotate by r, scale by s*/
 #ifndef BOAT
 #define BOAT
 #define MAX_ELEV 180
@@ -28,6 +27,7 @@ extern Boat rightBoat;
 
 void drawBoat(const Boat * boot, float s);
 void updateBoat(Boat * boot);
+/*used to update the boat position while it's moving*/
 void updateBoatShell(const Boat * boot); 
 /*used to recalculate shell position while it's loaded in a boat and the boat
  * is moving around*/

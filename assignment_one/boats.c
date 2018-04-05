@@ -2,8 +2,9 @@
 #include "boats.h"
 #define X_GUN_OFFSET .5
 #define Y_GUN_OFFSET .25
-#define HIT_RADIUS .09 /*otherwise the projectile hits its own boat*/
-/*TODO: Consider declaring structs to store the vertices of the boats
+#define HIT_RADIUS .09 /*the projectile hits its own boat on launch if this is
+any bigger*/
+/*I should consider declaring structs to store the vertices of the boats
  * */
 void drawBoat(const Boat * boot, float s)
 {
@@ -117,7 +118,12 @@ void updateBoatShell(const Boat * boot)
 	float guny = Y_GUN_OFFSET +
 				(sinf((boot->gun_elev * M_PI) / 180) * BOAT_GUN_L);
 	float w = atan2(guny,gunx) + atan(dy);
-	
+    /*The useful result of all the calculations above is that w has the angle
+     * of the rotation in world-space of the gun muzzle around the z axis, we
+     * can use the unit circle to find the x and y co-ordinate of it in x 
+     * space*/
+
+
 	if(boot->shellp != NULL)
 	{
 		/*Calculate useful information*/
@@ -133,6 +139,8 @@ void updateBoatShell(const Boat * boot)
 	}
 	if(boot->dp != NULL)
 	{
+        /*do the exact same calculations as before, except use the to 
+         * set up the defensive projectile*/
 		(boot->dp)->proj.p.x = boot->x + (cosf(w) * BOAT_SCALE);
 		(boot->dp)->proj.p.y = y + (sinf(w) * BOAT_SCALE);
 		/*set the direction vector as well*/
@@ -148,7 +156,8 @@ bool detectBoatHit(const Boat * boot, const Proj2Vec2f * shell)
 	/*I can take some measures to avoid calculation in here based on the position
 	 * of the shell. for example, if the shell has a negative x co-ord and 
 	 * the boat a positive one, we can return false without doing any further
-	 * computing*/	    
+	 * computing, effectively the if statements below form a quad tree of depth
+     * 1*/	    
 	float y = AMP * sinf((k * boot->x) + ((M_PI/4.0) * g.wt));
 	if((boot->x < 0 && (shell->p).x > 0) || (boot->x > 0 && (shell->p).x < 0))
 	{
@@ -164,7 +173,6 @@ bool detectBoatHit(const Boat * boot, const Proj2Vec2f * shell)
 	float cx = (fabs(boot->x) - fabs((shell->p).x));
 	float cy = (fabs(y) - fabs((shell->p).y));
 	float c = sqrt((cx * cx) + (cy *cy));
-	//printf("c: %f\n", c);
 	if(c < HIT_RADIUS)
 	{
 		printf("boat hit detected\n");

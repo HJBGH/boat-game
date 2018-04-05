@@ -1,8 +1,6 @@
-/* You can ignore this for now, it just lets you exit when you press 'q' or ESC */
 #include "keyboard.h"
-/*There will need to be interactions with extern vars in order to handle 
- * keyboard input from this file*/
-
+/*There are pretty much no comments in this file because most of the code in 
+ * here is self explanatory and incredibly boring to type about*/
 void keyUp(unsigned char key, int x, int y)
 {
     switch(key)
