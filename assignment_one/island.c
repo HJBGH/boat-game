@@ -14,8 +14,7 @@ void drawIsland(const Island * i)
 	glPushMatrix();
 	//glLoadIdentity();	
 	glTranslatef(0,HEIGHT_OVER_X,0);
-	/*TODO !!!!!!!!! double check cannon specs*/
-	glRotatef((*i).gun_elev, 0, 0, 1);
+	glRotatef(i->gun_elev, 0, 0, 1);
 	glBegin(GL_QUAD_STRIP);
 	glVertex3f(ISLAND_GUN_L,.025,0);
 	glVertex3f(ISLAND_GUN_L,-0.025,0);
@@ -25,6 +24,14 @@ void drawIsland(const Island * i)
 	glPopMatrix();
 	glLoadIdentity();
 
+}
+
+void updateIsland(Island * i)
+{
+    if(i->gun_rot_s < 0 && i->gun_elev > MIN_ELEV)
+        i->gun_elev += i->gun_rot_s * g.dt;
+    else if(i -> gun_rot_s > 0 && i->gun_elev < MAX_I_ELEV)
+        i->gun_elev += i->gun_rot_s * g.dt;
 }
 
 /* I can rework this using the unit circle*/

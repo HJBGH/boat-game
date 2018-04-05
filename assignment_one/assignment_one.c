@@ -129,6 +129,7 @@ void idle()
      * allow for position / rotation updates independent of g.dt*/
     updateBoat(&rightBoat);
     updateBoat(&leftBoat);
+    updateIsland(&tasmania);
 	/* these update methods are contained in their respective 
 	 * files, they essentially allow the shell to be moved with the
 	 * movement of the boat's gun as it bobs on the waves*/

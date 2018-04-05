@@ -106,21 +106,19 @@ void keyboard(unsigned char key, int x, int y)
         break;
 	/*cannon controls*/
 	case 'f':
-		if(tasmania.gun_elev < 170)
+		if(tasmania.gun_elev < MAX_ELEV)
 		{
 			printf("Island gun rotating left\n");
 			tasmania.gun_rot_s = GUN_S;
 			printf("%f - island gun elevation\n", tasmania.gun_elev);
-			updateIslandShell(&tasmania);
 		}
 		break;
 	case 'h':
-		if(tasmania.gun_elev > 10)
+		if(tasmania.gun_elev > MIN_ELEV)
 		{
 			printf("Island gun rotating right\n");
 			tasmania.gun_rot_s = -GUN_S;
 			printf("%f - island gun elevation\n", tasmania.gun_elev);
-			updateIslandShell(&tasmania);
 		}
 		break;	
 	case 'g': /*tasmania fires its cannon*/
