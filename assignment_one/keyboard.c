@@ -20,6 +20,14 @@ void keyUp(unsigned char key, int x, int y)
 	case 'h':
 		tasmania.gun_rot_s = 0;
 		break;	
+	case 'O':
+	case 'o':
+		rightBoat.gun_rot_s = 0;
+		break;
+	case 'Q':
+	case 'q':
+		leftBoat.gun_rot_s = 0;
+		break;
     default:
         printf("pbt");
         break;
@@ -146,11 +154,11 @@ void keyboard(unsigned char key, int x, int y)
 		}
 		break;
 	case 'O':
-		if(rightBoat.gun_elev > 90)
-			rightBoat.gun_rot_s = GUN_S;
+		if(rightBoat.gun_elev > MAX_B_ELEV)
+			rightBoat.gun_rot_s = -GUN_S;
 		break;
 	case 'o':
-		if(rightBoat.gun_elev < 180)
+		if(rightBoat.gun_elev < MAX_I_ELEV)
 			rightBoat.gun_rot_s = GUN_S;
 		break;
 	case 'i':
@@ -177,11 +185,11 @@ void keyboard(unsigned char key, int x, int y)
 		}
 		break;
 	case 'Q':
-		if(leftBoat.gun_elev > 10)
-			leftBoat.gun_rot_s = GUN_S;
+		if(leftBoat.gun_elev > MIN_ELEV)
+			leftBoat.gun_rot_s = -GUN_S;
 		break;
 	case 'q':
-		if(leftBoat.gun_elev < 80)
+		if(leftBoat.gun_elev < MAX_B_ELEV)
 			leftBoat.gun_rot_s = GUN_S;
 		break;
 	case 'e':

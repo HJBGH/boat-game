@@ -87,7 +87,21 @@ void updateBoat(Boat * boot)
         else if(!(boot->left) && boot->x < R_MAX)
             boot->x += boot->s * g.dt;
     }
-    /*also need to update gun elevation in here*/
+    /*update gun elevation also*/
+    if(boot->gun_rot_s < 0)
+    {
+        if(boot->left && boot->gun_elev > MIN_ELEV)
+            boot->gun_elev += boot->gun_rot_s * g.dt;
+        else if(!(boot->left) && boot->gun_elev > MAX_B_ELEV)
+            boot->gun_elev += boot->gun_rot_s * g.dt;
+    }
+    else if(boot->gun_rot_s > 0)
+    {
+        if(boot->left && boot->gun_elev < MAX_B_ELEV)
+            boot->gun_elev += boot->gun_rot_s * g.dt;
+        else if(!(boot->left) && boot->gun_elev < MAX_I_ELEV)
+            boot->gun_elev += boot->gun_rot_s * g.dt;
+    }
 }
 
 /*The defense projectile also gets updated in here*/

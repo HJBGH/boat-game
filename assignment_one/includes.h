@@ -37,7 +37,8 @@ projectile pointers, MAG being magazine*/
 #define GUN_S 30 /*gun rotation speed*/
 #define BOAT_SPEED .3 /*slow boats*/
 #define MAX_I_ELEV 180
-#define MIN_I_ELEV 10
+#define MAX_B_ELEV 90
+#define MIN_ELEV 0
 
 #endif
 
