@@ -44,9 +44,6 @@ void keyboard(unsigned char key, int x, int y)
     case 27:/*27 is esc*/   
         exit(EXIT_SUCCESS); 
         break;
-    case ' ':
-        printf("Spacebar pressed\n");
-        break;
     /*wave options*/
     case 'n':
         printf("toggling wave normals\n");
