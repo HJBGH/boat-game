@@ -16,7 +16,7 @@ int segments = 64;
 float k = (2 * M_PI) / WL;
 
 Proj2Vec2f *mag[MAG_DEPTH];
-Def_proj *def_mag[MAG_DEPTH];/*this second array of projectile pointers 
+Proj2Vec2f *def_mag[MAG_DEPTH];/*this second array of projectile pointers 
 are used for modeling the flight of the defensive pellets*/
 Global g =
 {
@@ -108,10 +108,10 @@ void idle()
 	{
 		for(int i = 0; i < MAG_DEPTH; i++)
 		{
-			if(def_mag[i]->proj.loaded == false 
-			&& def_mag[i]->proj.fired == false)
+			if(def_mag[i]->loaded == false 
+			&& def_mag[i]->fired == false)
 			{
-				def_mag[i]->proj.loaded = true;
+				def_mag[i]->loaded = true;
 				tasmania.dp = def_mag[i];
 				tasmania.dp->r = .01;/*set initial radius*/
 				printf("new shell loaded into island cannon\n");
@@ -161,7 +161,7 @@ void idle()
 			/*O(N^2), absolute garbage fire, this isn't good*/
 			for(int k = 0; k < MAG_DEPTH; k++)
 			{
-				if(def_mag[k]->proj.fired == true)
+				if(def_mag[k]->fired == true)
 				{
 					if(detectIntercept(def_mag[k], mag[i]))
 					{
@@ -172,7 +172,7 @@ void idle()
 				}
 			}
 		}
-		if(def_mag[i]->proj.fired == true)
+		if(def_mag[i]->fired == true)
 		{
 			updateDefProj(def_mag[i]);
 		}
@@ -249,10 +249,8 @@ void drawOcean()
         {
             x = (i * stepSize) + L_MAX;
             y = AMP * sinf((k * x) + ((M_PI/4.0) * g.wt));
-            /*printf("%f <- x\n", x);*/
             dy = (k * AMP) * cosf((k * x) + ((M_PI/4.0) * g.wt));
 
-            //printf("%f <- dy\n\n", dy);
 			if(wave_tang_flag)
 			{
             	drawVector(x, y, 1, dy, .1, true, 1.0, 0.0, 0.0);         
@@ -278,8 +276,6 @@ void drawOcean()
     {
         x = (i * stepSize) + L_MAX;
         y = AMP * sinf((k * x) + ((M_PI/4.0) * g.wt));
-        /*printf("%f <- x\n", x);
-        printf("%f <- y\n\n", y);*/
         glVertex3f(x, y, 1.0);
         glVertex3f(x, OCEAN_FLOOR, 1.0);
     }
@@ -323,9 +319,9 @@ void display()
 		{
 			drawProj((mag[i]));
 		}
-		if(def_mag[i]->proj.fired == true)
+		if(def_mag[i]->fired == true)
 		{
-			drawDefProj(def_mag[i]);
+			drawProj(def_mag[i]);
 		}
 	}
 
@@ -349,10 +345,11 @@ void init()
 		printf("Projectile memory allocated\n");
 		mag[i]->fired = false;
 		mag[i]->loaded = false;
-		def_mag[i] = (Def_proj*) malloc(sizeof(Def_proj));
+		mag[i]->r = .01; //very small radius for cannon balls, doesn't change
+		def_mag[i] = (Proj2Vec2f*) malloc(sizeof(Proj2Vec2f));
 		printf("Defensive projectile memory allocated\n");
-		def_mag[i]->proj.fired = false;
-		def_mag[i]->proj.loaded = false;
+		def_mag[i]->fired = false;
+		def_mag[i]->loaded = false;
 		def_mag[i]->r = .01;
 	}
 
@@ -406,11 +403,10 @@ void boatCDhelper(Boat * boot)
 	{
 		for(int i = 0; i < MAG_DEPTH; i++)
 		{
-			if((*mag[i]).loaded == false && (*mag[i]).fired == false)
+			if(mag[i]->loaded == false && mag[i]->fired == false)
 			{
 				mag[i]->loaded = true;
 				boot->shellp = mag[i];
-				printf("new shell loaded into leftboat cannon\n");
 				break;
 			}
 		}
@@ -419,13 +415,12 @@ void boatCDhelper(Boat * boot)
 	{
 		for(int i = 0; i < MAG_DEPTH; i++)
 		{
-			if(def_mag[i]->proj.loaded == false 
-			&& def_mag[i]->proj.fired == false)
+			if(def_mag[i]->loaded == false 
+			&& def_mag[i]->fired == false)
 			{
-				def_mag[i]->proj.loaded = true;
+				def_mag[i]->loaded = true;
 				boot->dp = def_mag[i];
 				boot->dp->r = .01;
-				printf("new defense shell loaded into leftboat cannon\n");
 				break;
 			}
 		}

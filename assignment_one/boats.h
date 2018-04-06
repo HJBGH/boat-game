@@ -19,7 +19,7 @@ typedef struct
 	float cd; /*cooldown*/
 	float def_cd; /*missile defence cd*/
 	Proj2Vec2f * shellp; /*currently loaded cannon shell*/
-	Def_proj * dp; /*currently loaded defense shell*/
+	Proj2Vec2f * dp; /*currently loaded defense shell*/
 } Boat;
 
 extern Boat leftBoat;

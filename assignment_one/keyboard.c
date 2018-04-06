@@ -142,8 +142,8 @@ void keyboard(unsigned char key, int x, int y)
 		{
 			printf("island defensive shell fired\n");
 			tasmania.def_cd = 1;/* 1000 millisecond (1 second) cooldown*/
-			(tasmania.dp)->proj.fired = true; 
-			(tasmania.dp)->proj.loaded = false;
+			(tasmania.dp)->fired = true; 
+			(tasmania.dp)->loaded = false;
 			/*setting fired to true causes the shell to start to change
 			 * position, setting loaded to false means other cannons
 			 * can use it once it's added back to the pool*/
@@ -177,8 +177,8 @@ void keyboard(unsigned char key, int x, int y)
 		{
 			printf("firing rightboat defense\n");
 			rightBoat.def_cd = 1;
-			(rightBoat.dp)->proj.fired = true;
-			(rightBoat.dp)->proj.loaded = false;
+			(rightBoat.dp)->fired = true;
+			(rightBoat.dp)->loaded = false;
 			rightBoat.dp = NULL;
 		}
 		break;
@@ -208,8 +208,8 @@ void keyboard(unsigned char key, int x, int y)
 		{
 			printf("firing leftboat defense\n");
 			leftBoat.def_cd = 1;
-			(leftBoat.dp)->proj.fired = true;
-			(leftBoat.dp)->proj.loaded = false;
+			(leftBoat.dp)->fired = true;
+			(leftBoat.dp)->loaded = false;
 			leftBoat.dp = NULL;
 		}
 		break;

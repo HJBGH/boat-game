@@ -78,12 +78,12 @@ void updateBoat(Boat * boot)
     {
         if(boot->left && boot->x > L_MAX)
             boot->x += boot->s * g.dt;
-        else if(!(boot->left) && boot->x > CENTER)
+        else if(!(boot->left) && boot->x > CENTER+.15)//.15 begin island width
             boot->x += boot->s * g.dt;
     }
     else if(boot->s > 0)
     {
-        if(boot->left && boot->x < CENTER)
+        if(boot->left && boot->x < CENTER-.15)
             boot->x += boot->s * g.dt;
         else if(!(boot->left) && boot->x < R_MAX)
             boot->x += boot->s * g.dt;
@@ -141,13 +141,13 @@ void updateBoatShell(const Boat * boot)
 	{
         /*do the exact same calculations as before, except use the to 
          * set up the defensive projectile*/
-		(boot->dp)->proj.p.x = boot->x + (cosf(w) * BOAT_SCALE);
-		(boot->dp)->proj.p.y = y + (sinf(w) * BOAT_SCALE);
+		(boot->dp)->p.x = boot->x + (cosf(w) * BOAT_SCALE);
+		(boot->dp)->p.y = y + (sinf(w) * BOAT_SCALE);
 		/*set the direction vector as well*/
 		w =  ((boot->gun_elev * M_PI) / 180) + atan(dy);
 
-		(boot->dp)->proj.d.x = (cosf(w) * SHELL_S);
-		(boot->dp)->proj.d.y = (sinf(w) * SHELL_S);
+		(boot->dp)->d.x = (cosf(w) * SHELL_S);
+		(boot->dp)->d.y = (sinf(w) * SHELL_S);
 	}	
 }
 

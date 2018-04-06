@@ -12,6 +12,8 @@ typedef struct
 	bool loaded; /*so two cannons don't use same projectile*/
 	float s; /*launch velocity, used to calculate components of and d 
 	as the barrel angle changes*/
+	float r; /*radius of the projectile, this is also used to model the radius
+	of the pellet cloud of the missile defense shells*/
 	Vec2f p;
 	Vec2f d;
 	/* p tracks current position, 
@@ -19,24 +21,15 @@ typedef struct
 	 * acceleration is handled in update functions */
 } Proj2Vec2f; /*a projectile made of 2x vec2f structs*/
 
-/*The struct below is essentially a wrapper struct used to track an 
- * the expanding radius to model the cloud of pellets being used as missle
- * defense by the boats*/
-typedef struct
-{
-	Proj2Vec2f proj;
-	float r;
-} Def_proj;
 
 void drawTraj(const Proj2Vec2f * shell);/*draw trajectory of projectile*/
 void drawProj(const Proj2Vec2f * shell);/*draw a projectile*/
-void drawDefProj(const Def_proj * dp);/*draw a defense projectile circle*/
 void updateProj(Proj2Vec2f * shell);/*update a projectile*/
-void updateDefProj(Def_proj * dp);/*wrapper for updateProj, also updates the
+void updateDefProj(Proj2Vec2f * dshell);/*wrapper for updateProj, also updates the
 radius of the pellet cloud*/
 /*detectIntercept is used to detect collisions between defensive projectiles
  * and shells*/
-bool detectIntercept(const Def_proj * dp, const Proj2Vec2f * shell);
+bool detectIntercept(const Proj2Vec2f * dshell, const Proj2Vec2f * shell);
 
 //this declaration is somewhat useless, this only gets used in assignment_one.c
 extern Proj2Vec2f *mag[MAG_DEPTH];/*MAG_DEPTH is defined in includes.h*/

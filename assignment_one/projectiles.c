@@ -31,15 +31,6 @@ void drawTraj(const Proj2Vec2f * shell)
 	glEnd();
 }
 
-void drawProj(const Proj2Vec2f * shell)
-{
-	glPointSize(5.0);
-	glBegin(GL_POINTS);
-	glColor3f(1,1,1);
-	glVertex2f(shell->p.x, shell->p.y);
-	glEnd();
-}
-
 /*This only gets used while the projectile is in flight*/
 void updateProj(Proj2Vec2f * shell)
 {
@@ -62,50 +53,53 @@ void updateProj(Proj2Vec2f * shell)
 	}
 }
 
-void drawDefProj(const Def_proj * dp)
+/*general purpose projectile drawing, it just draws a circle based on
+ * information contained in the projectile struct*/
+void drawProj(const Proj2Vec2f * shell)
 {
     /*This draws a circle, it should've been named as such*/
 	glBegin(GL_LINE_STRIP);
 	glColor3f(1.0,1.0,1.0);
 	for(float i = 0; i < 2*M_PI; i += .01)
 	{
-		glVertex3f(dp->proj.p.x + (dp->r * cosf(i)), 
-				   dp->proj.p.y + (dp->r * sinf(i)), 0);
+		glVertex3f(shell->p.x + (shell->r * cosf(i)), 
+				   shell->p.y + (shell->r * sinf(i)), 0);
 	}
 	glEnd();
 }
 
-void updateDefProj(Def_proj * dp)
+void updateDefProj(Proj2Vec2f * dshell)
 {
-	dp->r += g.dt * EXPANSION_RATE;
-	if(dp->r > MAX_R)
+	dshell->r += g.dt * EXPANSION_RATE;
+	if(dshell->r > MAX_R)
 	{
-		dp->proj.p.x = 2; /* triggers projectile recycling in updateProj, see
+		dshell->p.x = 2; /* triggers projectile recycling in updateProj, see
 						 * that function for details*/
 	}
-	updateProj(&(dp->proj));
+	updateProj(dshell);
 }
 
-bool detectIntercept(const Def_proj * dp, const Proj2Vec2f * shell)
+bool detectIntercept(const Proj2Vec2f * dshell, const Proj2Vec2f * shell)
 {
-	if((dp->proj.p.x < 0 && shell->p.x > 0) || 
-	(dp->proj.p.x > 0 && shell->p.x < 0))
+	/*The two if statements below effectively divide the screen space
+	 * into a quad tree of depth 1*/
+	if((dshell->p.x < 0 && shell->p.x > 0) || 
+	(dshell->p.x > 0 && shell->p.x < 0))
 	{
 		return false;
 	}
-	if((dp->proj.p.y < 0 && shell->p.y > 0) || 
-	(dp->proj.p.y > 0 && shell->p.y < 0))
+	if((dshell->p.y < 0 && shell->p.y > 0) || 
+	(dshell->p.y > 0 && shell->p.y < 0))
 	{
 		return false;
 	}
 	/*calculate the hypotenuse of the triangle formed by the shell, the centre
 	  of the boat ( it's x,y co-ords) and a third point that is the intersection
 	  of the shell x axis and the boat y axis.*/
-	float cx = (fabs(dp->proj.p.x) - fabs(shell->p.x));
-	float cy = (fabs(dp->proj.p.y) - fabs(shell->p.y));
+	float cx = (fabs(dshell->p.x) - fabs(shell->p.x));
+	float cy = (fabs(dshell->p.y) - fabs(shell->p.y));
 	float c = sqrt((cx * cx) + (cy *cy));
-	//printf("c: %f\n", c);
-	if(c < dp->r)
+	if(c < dshell->r + shell->r)
 	{
 		printf("intercept detected\n");
 		return true;
