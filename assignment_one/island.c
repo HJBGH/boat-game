@@ -60,7 +60,9 @@ void updateIslandShell(const Island * i)
 /*The actions to take if the island is hit are managed in assignment_one.c*/
 bool detectIslandHit(const Proj2Vec2f * shell)
 {
-    /*basic static bounding box style collision*/
+    /*basic static bounding box style collision, I've fudged the hit
+	 * detection here by using the x,y co-ordinates of the shell instead of 
+	 * it's radius.*/
 	if((shell->p.x > -ISLAND_X && shell->p.x < ISLAND_X) &&
 		(shell->p.y > OCEAN_FLOOR && shell-> p.y < HEIGHT_OVER_X))
 		{
