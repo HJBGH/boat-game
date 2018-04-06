@@ -8,17 +8,17 @@ better with this quatity for balance*/
 typedef struct {float x, y;} Vec2f;
 typedef struct
 {
-	bool fired; /*used when deciding when to draw the projectile*/
-	bool loaded; /*so two cannons don't use same projectile*/
-	float s; /*launch velocity, used to calculate components of and d 
-	as the barrel angle changes*/
-	float r; /*radius of the projectile, this is also used to model the radius
-	of the pellet cloud of the missile defense shells*/
-	Vec2f p;
-	Vec2f d;
-	/* p tracks current position, 
-	 * d tracks x and y components of current velocity,
-	 * acceleration is handled in update functions */
+    bool fired; /*used when deciding when to draw the projectile*/
+    bool loaded; /*so two cannons don't use same projectile*/
+    float s; /*launch velocity, used to calculate components of and d 
+    as the barrel angle changes*/
+    float r; /*radius of the projectile, this is also used to model the radius
+    of the pellet cloud of the missile defense shells*/
+    Vec2f p;
+    Vec2f d;
+    /* p tracks current position, 
+     * d tracks x and y components of current velocity,
+     * acceleration is handled in update functions */
 } Proj2Vec2f; /*a projectile made of 2x vec2f structs*/
 
 

@@ -7,19 +7,19 @@
 #define BOAT_GUN_L .5
 typedef struct
 {
-	bool left;/*used drawBoat function*/
-	int hp;
-	float x; /*y gets calculated later, I've re-thought this,
-				y gets used so frequently that it might be worth
-				storing it somewhere*/
-	float gun_elev; /*gun elevation in degrees*/
-	float colors[3];
+    bool left;/*used drawBoat function*/
+    int hp;
+    float x; /*y gets calculated later, I've re-thought this,
+                y gets used so frequently that it might be worth
+                storing it somewhere*/
+    float gun_elev; /*gun elevation in degrees*/
+    float colors[3];
     float s; /*s for SPEED, gotta go FAST*/
-	float gun_rot_s; /*gun rotation speed*/
-	float cd; /*cooldown*/
-	float def_cd; /*missile defence cd*/
-	Proj2Vec2f * shellp; /*currently loaded cannon shell*/
-	Proj2Vec2f * dp; /*currently loaded defense shell*/
+    float gun_rot_s; /*gun rotation speed*/
+    float cd; /*cooldown*/
+    float def_cd; /*missile defence cd*/
+    Proj2Vec2f * shellp; /*currently loaded cannon shell*/
+    Proj2Vec2f * dp; /*currently loaded defense shell*/
 } Boat;
 
 extern Boat leftBoat;

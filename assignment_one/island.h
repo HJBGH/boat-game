@@ -4,13 +4,13 @@
 #define ISLAND
 typedef struct 
 {
-	int hp; 
-	float gun_elev;	
-	float gun_rot_s;/*gun rotation speed*/
-	float cd; /*cooldown*/
-	float def_cd; /*missile defence cooldown*/
-	Proj2Vec2f * shellp;/*regular cannon shell*/
-	Proj2Vec2f * dp;/*Missile cannon shell*/
+    int hp; 
+    float gun_elev; 
+    float gun_rot_s;/*gun rotation speed*/
+    float cd; /*cooldown*/
+    float def_cd; /*missile defence cooldown*/
+    Proj2Vec2f * shellp;/*regular cannon shell*/
+    Proj2Vec2f * dp;/*Missile cannon shell*/
 } Island;
 
 #define ISLAND_GUN_L .15 /*island gun length*/
