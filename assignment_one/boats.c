@@ -173,7 +173,7 @@ bool detectBoatHit(const Boat * boot, const Proj2Vec2f * shell)
 	float cx = (fabs(boot->x) - fabs((shell->p).x));
 	float cy = (fabs(y) - fabs((shell->p).y));
 	float c = sqrt((cx * cx) + (cy *cy));
-	if(c < HIT_RADIUS)
+	if(c < HIT_RADIUS + shell->r)
 	{
 		printf("boat hit detected\n");
 		return true;
